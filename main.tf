@@ -6,6 +6,19 @@ resource "aws_vpc_endpoint" "s3_endpoint" {
   vpc_endpoint_type = "Gateway"
   service_name      = "com.amazonaws.${data.aws_region.current_region.name}.s3"
   route_table_ids   = ["${var.route_tables_ids_list}"]
+
+  policy = <<POLICY
+{
+    "Statement": [
+        {
+            "Action": "s3.*",
+            "Effect": "Allow",
+            "Resource": "*",
+            "Principal": "*"
+        }
+    ]
+}
+POLICY
 }
 
 resource "aws_vpc_endpoint" "dynamo_endpoint" {
@@ -14,4 +27,17 @@ resource "aws_vpc_endpoint" "dynamo_endpoint" {
   vpc_endpoint_type = "Gateway"
   service_name      = "com.amazonaws.${data.aws_region.current_region.name}.dynamodb"
   route_table_ids   = ["${var.route_tables_ids_list}"]
+
+  policy = <<POLICY
+{
+    "Statement": [
+        {
+            "Action": "dynamodb.*",
+            "Effect": "Allow",
+            "Resource": "*",
+            "Principal": "*"
+        }
+    ]
+}
+POLICY
 }
