@@ -11,7 +11,7 @@ resource "aws_vpc_endpoint" "s3_endpoint" {
 {
     "Statement": [
         {
-            "Action": "s3.*",
+            "Action": "s3:*",
             "Effect": "Allow",
             "Resource": "*",
             "Principal": "*"
@@ -32,7 +32,7 @@ resource "aws_vpc_endpoint" "dynamo_endpoint" {
 {
     "Statement": [
         {
-            "Action": "dynamodb.*",
+            "Action": "dynamodb:*",
             "Effect": "Allow",
             "Resource": "*",
             "Principal": "*"
