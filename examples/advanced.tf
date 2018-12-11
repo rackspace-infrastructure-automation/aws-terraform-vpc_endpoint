@@ -4,18 +4,18 @@ provider "aws" {
 }
 
 module "base_network" {
-  source   = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.0.1"
+  source   = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.0.6"
   vpc_name = "VPC-Endpoint-Test"
 }
 
 module "security_groups" {
-  source        = "git@github.com:rackspace-infrastructure-automation/aws-terraform-security_group?ref=v0.0.3"
+  source        = "git@github.com:rackspace-infrastructure-automation/aws-terraform-security_group?ref=v0.0.5"
   resource_name = "test_sg"
   vpc_id        = "${module.base_network.vpc_id}"
 }
 
 module "vpc_endpoint" {
-  source                                  = "../../module"
+  source                                  = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.0.3"
   resource_name                           = "VPC-Endpoint-Testing"
   vpc_id                                  = "${module.base_network.vpc_id}"
   route_tables_ids_list                   = "${module.base_network.private_route_tables}"
