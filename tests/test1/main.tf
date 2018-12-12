@@ -4,7 +4,7 @@ provider "aws" {
 }
 
 module "base_network" {
-  source   = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.0.1"
+  source   = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=master"
   vpc_name = "VPC-Endpoint-Test"
 }
 
