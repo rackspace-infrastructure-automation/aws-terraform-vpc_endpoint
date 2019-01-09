@@ -16,11 +16,3 @@ module "vpc_endpoint" {
   dynamo_db_endpoint_enable = true
   s3_endpoint_enable        = true
 }
-
-output "s3_vpc_endpoint_id" {
-  value = "${module.vpc_endpoint.s3_vpc_endpoint_id}"
-}
-
-output "dynamodb_vpc_endpoint_id" {
-  value = "${module.vpc_endpoint.dynamodb_vpc_endpoint_id}"
-}
