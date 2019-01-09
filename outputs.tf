@@ -4,7 +4,7 @@ output "s3_vpc_endpoint_id" {
 }
 
 output "dynamodb_vpc_endpoint_id" {
-  description = "S3 vpc endpoint ID"
+  description = "S3 dynamodb endpoint ID"
   value       = "${element(coalescelist(aws_vpc_endpoint.dynamo_endpoint.*.id, list("")), 0)}"
 }
 
