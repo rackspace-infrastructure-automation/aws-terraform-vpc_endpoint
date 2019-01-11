@@ -1,3 +1,21 @@
+# aws-terraform-vpc_endpoint
+
+This module builds VPC endpoints based on the inputs.
+
+## Basic Usage
+
+```
+module "vpc_endpoint" {
+  source                    = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.0.4"
+  vpc_id                    = "${module.base_network.vpc_id}"
+  route_tables_ids_list     = "${module.base_network.private_route_tables}"
+  dynamo_db_endpoint_enable = true
+  s3_endpoint_enable        = true
+}
+```
+
+Full working references are available at [examples](examples)
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -26,7 +44,6 @@
 | logs\_private\_dns\_enable | Enable/Disable private dns on the logs endpoint. Allowed values: true, false | string | `"false"` | no |
 | monitoring\_endpoint\_enable | Enable/Disable the monitoring VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
 | monitoring\_private\_dns\_enable | Enable/Disable private dns on the monitoring endpoint. Allowed values: true, false | string | `"false"` | no |
-| resource\_name | The name to be used for resources provisioned by this module | string | n/a | yes |
 | route\_tables\_ids\_list | List of Route Table ID's for each AZ | list | `<list>` | no |
 | s3\_endpoint\_enable | Enable/Disable the S3 VPC Endpoint. Allowed values: true, false | string | `"true"` | no |
 | sagemaker\_runtime\_endpoint\_enable | Enable/Disable the sagemaker.runtime VPC Endpoint. Allowed values: true, false | string | `"false"` | no |

@@ -16,7 +16,6 @@ module "security_groups" {
 
 module "vpc_endpoint" {
   source                                  = "../../module"
-  resource_name                           = "VPC-Endpoint-Testing"
   vpc_id                                  = "${module.base_network.vpc_id}"
   route_tables_ids_list                   = "${module.base_network.private_route_tables}"
   security_group_ids_list                 = ["${module.security_groups.vpc_endpoint_security_group_id}"]
