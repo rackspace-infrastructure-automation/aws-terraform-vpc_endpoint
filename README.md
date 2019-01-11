@@ -1,3 +1,5 @@
+# aws-terraform-vpc_endpoint
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -26,7 +28,6 @@
 | logs\_private\_dns\_enable | Enable/Disable private dns on the logs endpoint. Allowed values: true, false | string | `"false"` | no |
 | monitoring\_endpoint\_enable | Enable/Disable the monitoring VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
 | monitoring\_private\_dns\_enable | Enable/Disable private dns on the monitoring endpoint. Allowed values: true, false | string | `"false"` | no |
-| resource\_name | The name to be used for resources provisioned by this module | string | n/a | yes |
 | route\_tables\_ids\_list | List of Route Table ID's for each AZ | list | `<list>` | no |
 | s3\_endpoint\_enable | Enable/Disable the S3 VPC Endpoint. Allowed values: true, false | string | `"true"` | no |
 | sagemaker\_runtime\_endpoint\_enable | Enable/Disable the sagemaker.runtime VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
@@ -65,4 +66,3 @@
 | servicecatalog\_vpc\_endpoint\_id | Servicecatalog vpc endpoint ID |
 | sns\_vpc\_endpoint\_id | SNS vpc endpoint ID |
 | ssm\_vpc\_endpoint\_id | SSM vpc endpoint ID |
-

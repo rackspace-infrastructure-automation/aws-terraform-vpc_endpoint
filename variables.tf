@@ -1,8 +1,3 @@
-variable "resource_name" {
-  description = "The name to be used for resources provisioned by this module"
-  type        = "string"
-}
-
 variable "environment" {
   description = "Application environment for which this network is being created. one of: ('Development', 'Integration', 'PreProduction', 'Production', 'QA', 'Staging', 'Test')"
   type        = "string"
