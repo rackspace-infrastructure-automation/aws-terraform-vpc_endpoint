@@ -4,7 +4,7 @@ provider "aws" {
 }
 
 module "base_network" {
-  source   = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.0.6"
+  source   = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.0.10"
   vpc_name = "VPC-Endpoint-Test"
 }
 
@@ -15,7 +15,7 @@ module "security_groups" {
 }
 
 module "vpc_endpoint" {
-  source                                  = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.0.4"
+  source                                  = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.0.5"
   vpc_id                                  = "${module.base_network.vpc_id}"
   route_tables_ids_list                   = "${concat(module.base_network.private_route_tables, module.base_network.public_route_tables)}"
   security_group_ids_list                 = ["${module.security_groups.vpc_endpoint_security_group_id}"]
@@ -52,6 +52,8 @@ module "vpc_endpoint" {
   servicecatalog_private_dns_enable       = true
   sns_endpoint_enable                     = true
   sns_private_dns_enable                  = true
+  sqs_endpoint_enable                     = true
+  sqs_private_dns_enable                  = true
   ssm_endpoint_enable                     = true
   ssm_private_dns_enable                  = true
 }

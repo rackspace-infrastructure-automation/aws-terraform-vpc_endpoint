@@ -83,6 +83,11 @@ output "sns_vpc_endpoint_id" {
   value       = "${element(coalescelist(aws_vpc_endpoint.sns_endpoint.*.id, list("")), 0)}"
 }
 
+output "sqs_vpc_endpoint_id" {
+  description = "SQS vpc endpoint ID"
+  value       = "${element(coalescelist(aws_vpc_endpoint.sqs_endpoint.*.id, list("")), 0)}"
+}
+
 output "ssm_vpc_endpoint_id" {
   description = "SSM vpc endpoint ID"
   value       = "${element(coalescelist(aws_vpc_endpoint.ssm_endpoint.*.id, list("")), 0)}"

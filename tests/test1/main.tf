@@ -52,6 +52,8 @@ module "vpc_endpoint" {
   servicecatalog_private_dns_enable       = true
   sns_endpoint_enable                     = true
   sns_private_dns_enable                  = true
+  sqs_endpoint_enable                     = true
+  sqs_private_dns_enable                  = true
   ssm_endpoint_enable                     = true
   ssm_private_dns_enable                  = true
 }

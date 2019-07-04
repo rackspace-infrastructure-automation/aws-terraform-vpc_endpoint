@@ -6,7 +6,7 @@ This module builds VPC endpoints based on the inputs.
 
 ```
 module "vpc_endpoint" {
-  source                    = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.0.4"
+  source                    = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.0.5"
   vpc_id                    = "${module.base_network.vpc_id}"
   route_tables_ids_list     = "${concat(module.base_network.private_route_tables, module.base_network.public_route_tables)}"
   dynamo_db_endpoint_enable = true
@@ -55,6 +55,8 @@ Full working references are available at [examples](examples)
 | servicecatalog\_private\_dns\_enable | Enable/Disable private dns on the servicecatalog endpoint. Allowed values: true, false | string | `"false"` | no |
 | sns\_endpoint\_enable | Enable/Disable the sns VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
 | sns\_private\_dns\_enable | Enable/Disable private dns on the sns endpoint. Allowed values: true, false | string | `"false"` | no |
+| sqs\_endpoint\_enable | Enable/Disable the sqs VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
+| sqs\_private\_dns\_enable | Enable/Disable private dns on the sqs endpoint. Allowed values: true, false | string | `"false"` | no |
 | ssm\_endpoint\_enable | Enable/Disable the ssm VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
 | ssm\_private\_dns\_enable | Enable/Disable private dns on the ssm endpoint. Allowed values: true, false | string | `"false"` | no |
 | subnet\_ids\_list | List of Subnets to assoicate with Inteface endpoints. | list | `<list>` | no |
@@ -81,5 +83,6 @@ Full working references are available at [examples](examples)
 | secretsmanager\_vpc\_endpoint\_id | Secretsmanager vpc endpoint ID |
 | servicecatalog\_vpc\_endpoint\_id | Servicecatalog vpc endpoint ID |
 | sns\_vpc\_endpoint\_id | SNS vpc endpoint ID |
+| sqs\_vpc\_endpoint\_id | SQS vpc endpoint ID |
 | ssm\_vpc\_endpoint\_id | SSM vpc endpoint ID |
 
