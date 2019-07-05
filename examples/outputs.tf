@@ -101,6 +101,11 @@ output "sns_vpc_endpoint_id" {
   value       = "${module.vpc_endpoint.sns_vpc_endpoint_id}"
 }
 
+output "sqs_vpc_endpoint_id" {
+  description = "SQS vpc endpoint ID"
+  value       = "${module.vpc_endpoint.sqs_vpc_endpoint_id}"
+}
+
 output "ssm_vpc_endpoint_id" {
   description = "SSM vpc endpoint ID"
   value       = "${module.vpc_endpoint.ssm_vpc_endpoint_id}"

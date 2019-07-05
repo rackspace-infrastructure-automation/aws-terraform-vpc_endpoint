@@ -7,7 +7,7 @@
  *
  *```
  * module "vpc_endpoint" {
- *   source                    = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.0.4"
+ *   source                    = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.0.5"
  *   vpc_id                    = "${module.base_network.vpc_id}"
  *   route_tables_ids_list     = "${concat(module.base_network.private_route_tables, module.base_network.public_route_tables)}"
  *   dynamo_db_endpoint_enable = true
@@ -199,6 +199,17 @@ resource "aws_vpc_endpoint" "sns_endpoint" {
   vpc_endpoint_type   = "Interface"
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.sns"
   private_dns_enabled = "${var.sns_private_dns_enable}"
+}
+
+# sqs
+resource "aws_vpc_endpoint" "sqs_endpoint" {
+  count               = "${var.sqs_endpoint_enable ? 1 : 0}"
+  vpc_id              = "${var.vpc_id}"
+  subnet_ids          = ["${var.subnet_ids_list}"]
+  security_group_ids  = ["${var.security_group_ids_list}"]
+  vpc_endpoint_type   = "Interface"
+  service_name        = "com.amazonaws.${data.aws_region.current_region.name}.sqs"
+  private_dns_enabled = "${var.sqs_private_dns_enable}"
 }
 
 # ssm

@@ -245,6 +245,19 @@ variable "sns_private_dns_enable" {
   default     = false
 }
 
+# sqs
+variable "sqs_endpoint_enable" {
+  description = "Enable/Disable the sqs VPC Endpoint. Allowed values: true, false"
+  type        = "string"
+  default     = false
+}
+
+variable "sqs_private_dns_enable" {
+  description = "Enable/Disable private dns on the sqs endpoint. Allowed values: true, false"
+  type        = "string"
+  default     = false
+}
+
 # ssm
 variable "ssm_endpoint_enable" {
   description = "Enable/Disable the ssm VPC Endpoint. Allowed values: true, false"
