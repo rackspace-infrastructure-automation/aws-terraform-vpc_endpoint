@@ -2,28 +2,23 @@
  *  Basic Example Outputs
 */
 
-output "s3_vpc_endpoint_id" {
-  description = "S3 vpc endpoint ID"
-  value       = "${module.vpc_endpoint.s3_vpc_endpoint_id}"
-}
-
 output "dynamodb_vpc_endpoint_id" {
   description = "S3 vpc endpoint ID"
   value       = "${module.vpc_endpoint.dynamodb_vpc_endpoint_id}"
+}
+
+output "s3_vpc_endpoint_id" {
+  description = "S3 vpc endpoint ID"
+  value       = "${module.vpc_endpoint.s3_vpc_endpoint_id}"
 }
 
 /**
  * Advanced Example Outputs
 */
 
-output "s3_vpc_endpoint_id" {
-  description = "S3 vpc endpoint ID"
-  value       = "${module.vpc_endpoint.s3_vpc_endpoint_id}"
-}
-
-output "dynamodb_vpc_endpoint_id" {
-  description = "S3 dynamodb endpoint ID"
-  value       = "${module.vpc_endpoint.dynamodb_vpc_endpoint_id}"
+output "codebuild_fips_vpc_endpoint_id" {
+  description = "Codebuild-fips vpc endpoint ID"
+  value       = "${module.vpc_endpoint.codebuild_fips_vpc_endpoint_id}"
 }
 
 output "codebuild_vpc_endpoint_id" {
@@ -31,9 +26,9 @@ output "codebuild_vpc_endpoint_id" {
   value       = "${module.vpc_endpoint.codebuild_vpc_endpoint_id}"
 }
 
-output "codebuild-fips_vpc_endpoint_id" {
-  description = "Codebuild-fips vpc endpoint ID"
-  value       = "${module.vpc_endpoint.codebuild-fips_vpc_endpoint_id}"
+output "dynamodb_vpc_endpoint_id" {
+  description = "S3 dynamodb endpoint ID"
+  value       = "${module.vpc_endpoint.dynamodb_vpc_endpoint_id}"
 }
 
 output "ec2_vpc_endpoint_id" {
@@ -79,6 +74,11 @@ output "logs_vpc_endpoint_id" {
 output "monitoring_vpc_endpoint_id" {
   description = "Monitoring vpc endpoint ID"
   value       = "${module.vpc_endpoint.monitoring_vpc_endpoint_id}"
+}
+
+output "s3_vpc_endpoint_id" {
+  description = "S3 vpc endpoint ID"
+  value       = "${module.vpc_endpoint.s3_vpc_endpoint_id}"
 }
 
 output "sagemaker_runtime_vpc_endpoint_id" {
