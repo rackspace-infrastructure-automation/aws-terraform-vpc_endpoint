@@ -27,6 +27,12 @@ variable "security_group_ids_list" {
   default     = []
 }
 
+variable "tags" {
+  description = "Custom tags to apply to all resources."
+  type        = "map"
+  default     = {}
+}
+
 #####################
 # Gateway Endpoints #
 #####################
@@ -64,13 +70,13 @@ variable "codebuild_private_dns_enable" {
 # codebuild-fips is only available in us-east-1, us-east-2, us-west-1 and us-west-2.
 # So we have set it to be disabled by default until such time it's available everywhere.
 # https://docs.aws.amazon.com/general/latest/gr/rande.html#codebuild_region
-variable "codebuild-fips_endpoint_enable" {
+variable "codebuild_fips_endpoint_enable" {
   description = "Enable/Disable the codebuild-fips VPC Endpoint. Allowed values: true, false"
   type        = "string"
   default     = false
 }
 
-variable "codebuild-fips_private_dns_enable" {
+variable "codebuild_fips_private_dns_enable" {
   description = "Enable/Disable private dns on the codebuild-fips endpoint. Allowed values: true, false"
   type        = "string"
   default     = false
@@ -129,26 +135,26 @@ variable "events_private_dns_enable" {
 }
 
 # execute-api
-variable "execute-api_endpoint_enable" {
+variable "execute_api_endpoint_enable" {
   description = "Enable/Disable the execute-api VPC Endpoint. Allowed values: true, false"
   type        = "string"
   default     = false
 }
 
-variable "execute-api_private_dns_enable" {
+variable "execute_api_private_dns_enable" {
   description = "Enable/Disable private dns on the execute-api endpoint. Allowed values: true, false"
   type        = "string"
   default     = false
 }
 
 # kinesis-streams
-variable "kinesis-streams_endpoint_enable" {
+variable "kinesis_streams_endpoint_enable" {
   description = "Enable/Disable the kinesis-streams VPC Endpoint. Allowed values: true, false"
   type        = "string"
   default     = false
 }
 
-variable "kinesis-streams_private_dns_enable" {
+variable "kinesis_streams_private_dns_enable" {
   description = "Enable/Disable private dns on the kinesis-streams endpoint. Allowed values: true, false"
   type        = "string"
   default     = false

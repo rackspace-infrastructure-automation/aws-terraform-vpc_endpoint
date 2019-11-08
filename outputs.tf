@@ -1,21 +1,16 @@
-output "s3_vpc_endpoint_id" {
-  description = "S3 vpc endpoint ID"
-  value       = "${element(coalescelist(aws_vpc_endpoint.s3_endpoint.*.id, list("")), 0)}"
-}
-
-output "dynamodb_vpc_endpoint_id" {
-  description = "S3 dynamodb endpoint ID"
-  value       = "${element(coalescelist(aws_vpc_endpoint.dynamo_endpoint.*.id, list("")), 0)}"
-}
-
 output "codebuild_vpc_endpoint_id" {
   description = "Codebuild vpc endpoint ID"
   value       = "${element(coalescelist(aws_vpc_endpoint.codebuild_endpoint.*.id, list("")), 0)}"
 }
 
-output "codebuild-fips_vpc_endpoint_id" {
+output "codebuild_fips_vpc_endpoint_id" {
   description = "Codebuild-fips vpc endpoint ID"
-  value       = "${element(coalescelist(aws_vpc_endpoint.codebuild-fips_endpoint.*.id, list("")), 0)}"
+  value       = "${element(coalescelist(aws_vpc_endpoint.codebuild_fips_endpoint.*.id, list("")), 0)}"
+}
+
+output "dynamodb_vpc_endpoint_id" {
+  description = "S3 dynamodb endpoint ID"
+  value       = "${element(coalescelist(aws_vpc_endpoint.dynamo_endpoint.*.id, list("")), 0)}"
 }
 
 output "ec2_vpc_endpoint_id" {
@@ -38,14 +33,14 @@ output "events_vpc_endpoint_id" {
   value       = "${element(coalescelist(aws_vpc_endpoint.events_endpoint.*.id, list("")), 0)}"
 }
 
-output "execute-api_vpc_endpoint_id" {
+output "execute_api_vpc_endpoint_id" {
   description = "Execute-api vpc endpoint ID"
-  value       = "${element(coalescelist(aws_vpc_endpoint.execute-api_endpoint.*.id, list("")), 0)}"
+  value       = "${element(coalescelist(aws_vpc_endpoint.execute_api_endpoint.*.id, list("")), 0)}"
 }
 
-output "kinesis-streams_vpc_endpoint_id" {
+output "kinesis_streams_vpc_endpoint_id" {
   description = "Kinesis-streams vpc endpoint ID"
-  value       = "${element(coalescelist(aws_vpc_endpoint.kinesis-streams_endpoint.*.id, list("")), 0)}"
+  value       = "${element(coalescelist(aws_vpc_endpoint.kinesis_streams_endpoint.*.id, list("")), 0)}"
 }
 
 output "kms_vpc_endpoint_id" {
@@ -61,6 +56,11 @@ output "logs_vpc_endpoint_id" {
 output "monitoring_vpc_endpoint_id" {
   description = "Monitoring vpc endpoint ID"
   value       = "${element(coalescelist(aws_vpc_endpoint.monitoring_endpoint.*.id, list("")), 0)}"
+}
+
+output "s3_vpc_endpoint_id" {
+  description = "S3 vpc endpoint ID"
+  value       = "${element(coalescelist(aws_vpc_endpoint.s3_endpoint.*.id, list("")), 0)}"
 }
 
 output "sagemaker_runtime_vpc_endpoint_id" {
