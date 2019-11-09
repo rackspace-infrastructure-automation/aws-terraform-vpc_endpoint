@@ -34,7 +34,8 @@ module "base_network" {
 module "security_groups" {
   source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-security_group?ref=v0.0.3"
 
-  resource_name = "${random_string.identifier.result}_sg"
+  environment   = "${lookup(local.tags, "Environment")}"
+  resource_name = "test_sg"
   vpc_id        = "${module.base_network.vpc_id}"
 }
 
