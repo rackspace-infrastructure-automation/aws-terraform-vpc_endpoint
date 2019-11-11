@@ -31,12 +31,40 @@ module "base_network" {
   vpc_name = "VPC-Endpoint-${random_string.identifier.result}"
 }
 
-module "security_groups" {
-  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-security_group?ref=v0.0.3"
+resource "aws_security_group" "vpc_endpoint" {
+  name_prefix = "${random_string.identifier.result}-VpcEndpointSecurityGroup"
+  description = "VPC Endpoint Security Group"
+  vpc_id      = "${module.base_network.vpc_id}"
 
-  environment   = "${lookup(local.tags, "Environment")}"
-  resource_name = "test_sg"
-  vpc_id        = "${module.base_network.vpc_id}"
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = "${merge(
+    local.tags,
+    map("Name", "${random_string.identifier.result}-VpcEndpointSecurityGroup")
+  )}"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 module "vpc_endpoint" {
@@ -72,7 +100,7 @@ module "vpc_endpoint" {
   sagemaker_runtime_private_dns_enable    = true
   secretsmanager_endpoint_enable          = true
   secretsmanager_private_dns_enable       = true
-  security_group_ids_list                 = ["${module.security_groups.vpc_endpoint_security_group_id}"]
+  security_group_ids_list                 = ["${aws_security_group.vpc_endpoint.id}"]
   servicecatalog_endpoint_enable          = true
   servicecatalog_private_dns_enable       = true
   sns_endpoint_enable                     = true
