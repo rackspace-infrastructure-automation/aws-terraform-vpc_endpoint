@@ -85,9 +85,9 @@ module "vpc_endpoint" {
   events_endpoint_enable                  = true
   events_private_dns_enable               = true
   execute_api_endpoint_enable             = true
-  execute_api_private_dns_enable          = true
+  execute_api_private_dns_enable          = false
   kinesis_streams_endpoint_enable         = true
-  kinesis_streams_private_dns_enable      = true
+  kinesis_streams_private_dns_enable      = false
   kms_endpoint_enable                     = true
   kms_private_dns_enable                  = true
   logs_endpoint_enable                    = true
