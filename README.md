@@ -73,23 +73,23 @@ Full working references are available at [examples](examples)
 
 | Name | Description |
 |------|-------------|
-| codebuild\_fips\_vpc\_endpoint\_id | Codebuild-fips vpc endpoint ID |
-| codebuild\_vpc\_endpoint\_id | Codebuild vpc endpoint ID |
-| dynamodb\_vpc\_endpoint\_id | S3 dynamodb endpoint ID |
-| ec2\_vpc\_endpoint\_id | EC2 vpc endpoint ID |
-| ec2messages\_vpc\_endpoint\_id | EC2messages vpc endpoint ID |
-| elasticloadbalancing\_vpc\_endpoint\_id | Elasticloadbalancing vpc endpoint ID |
-| events\_vpc\_endpoint\_id | Events vpc endpoint ID |
-| execute\_api\_vpc\_endpoint\_id | Execute-api vpc endpoint ID |
-| kinesis\_streams\_vpc\_endpoint\_id | Kinesis-streams vpc endpoint ID |
-| kms\_vpc\_endpoint\_id | Kms vpc endpoint ID |
-| logs\_vpc\_endpoint\_id | Logs vpc endpoint ID |
-| monitoring\_vpc\_endpoint\_id | Monitoring vpc endpoint ID |
-| s3\_vpc\_endpoint\_id | S3 vpc endpoint ID |
-| sagemaker\_runtime\_vpc\_endpoint\_id | Sagemaker.runtime vpc endpoint ID |
-| secretsmanager\_vpc\_endpoint\_id | Secretsmanager vpc endpoint ID |
-| servicecatalog\_vpc\_endpoint\_id | Servicecatalog vpc endpoint ID |
-| sns\_vpc\_endpoint\_id | SNS vpc endpoint ID |
-| sqs\_vpc\_endpoint\_id | SQS vpc endpoint ID |
-| ssm\_vpc\_endpoint\_id | SSM vpc endpoint ID |
+| codebuild\_fips\_vpc\_endpoint\_id | CodeBuild-fips VPC endpoint ID |
+| codebuild\_vpc\_endpoint\_id | CodeBuild VPC endpoint ID |
+| dynamodb\_vpc\_endpoint\_id | DynamoDB VPC endpoint ID |
+| ec2\_vpc\_endpoint\_id | EC2 VPC endpoint ID |
+| ec2messages\_vpc\_endpoint\_id | EC2messages VPC endpoint ID |
+| elasticloadbalancing\_vpc\_endpoint\_id | Elasticloadbalancing VPC endpoint ID |
+| events\_vpc\_endpoint\_id | Events VPC endpoint ID |
+| execute\_api\_vpc\_endpoint\_id | Execute-api VPC endpoint ID |
+| kinesis\_streams\_vpc\_endpoint\_id | Kinesis-streams VPC endpoint ID |
+| kms\_vpc\_endpoint\_id | Kms VPC endpoint ID |
+| logs\_vpc\_endpoint\_id | Logs VPC endpoint ID |
+| monitoring\_vpc\_endpoint\_id | Monitoring VPC endpoint ID |
+| s3\_vpc\_endpoint\_id | S3 VPC endpoint ID |
+| sagemaker\_runtime\_vpc\_endpoint\_id | Sagemaker.runtime VPC endpoint ID |
+| secretsmanager\_vpc\_endpoint\_id | Secretsmanager VPC endpoint ID |
+| servicecatalog\_vpc\_endpoint\_id | Servicecatalog VPC endpoint ID |
+| sns\_vpc\_endpoint\_id | SNS VPC endpoint ID |
+| sqs\_vpc\_endpoint\_id | SQS VPC endpoint ID |
+| ssm\_vpc\_endpoint\_id | SSM VPC endpoint ID |
 
