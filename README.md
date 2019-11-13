@@ -4,13 +4,19 @@ This module builds VPC endpoints based on the inputs.
 
 ## Basic Usage
 
-```
+```HCL
 module "vpc_endpoint" {
-  source                    = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.0.5"
-  vpc_id                    = "${module.base_network.vpc_id}"
-  route_tables_ids_list     = "${concat(module.base_network.private_route_tables, module.base_network.public_route_tables)}"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.0.6"
+
   dynamo_db_endpoint_enable = true
+
+  route_tables_ids_list     = "${concat(
+    module.base_network.private_route_tables,
+    module.base_network.public_route_tables
+  )}"
+
   s3_endpoint_enable        = true
+  vpc_id                    = "${module.base_network.vpc_id}"
 }
 ```
 
@@ -20,9 +26,9 @@ Full working references are available at [examples](examples)
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| codebuild-fips\_endpoint\_enable | Enable/Disable the codebuild-fips VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
-| codebuild-fips\_private\_dns\_enable | Enable/Disable private dns on the codebuild-fips endpoint. Allowed values: true, false | string | `"false"` | no |
 | codebuild\_endpoint\_enable | Enable/Disable the codebuild VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
+| codebuild\_fips\_endpoint\_enable | Enable/Disable the codebuild-fips VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
+| codebuild\_fips\_private\_dns\_enable | Enable/Disable private dns on the codebuild-fips endpoint. Allowed values: true, false | string | `"false"` | no |
 | codebuild\_private\_dns\_enable | Enable/Disable private dns on the codebuild endpoint. Allowed values: true, false | string | `"false"` | no |
 | dynamo\_db\_endpoint\_enable | Enable/Disable the DynamoDB VPC Endpoint. Allowed values: true, false | string | `"true"` | no |
 | ec2\_endpoint\_enable | Enable/Disable the ec2 VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
@@ -34,10 +40,10 @@ Full working references are available at [examples](examples)
 | environment | Application environment for which this network is being created. one of: ('Development', 'Integration', 'PreProduction', 'Production', 'QA', 'Staging', 'Test') | string | `"Development"` | no |
 | events\_endpoint\_enable | Enable/Disable the events VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
 | events\_private\_dns\_enable | Enable/Disable private dns on the events endpoint. Allowed values: true, false | string | `"false"` | no |
-| execute-api\_endpoint\_enable | Enable/Disable the execute-api VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
-| execute-api\_private\_dns\_enable | Enable/Disable private dns on the execute-api endpoint. Allowed values: true, false | string | `"false"` | no |
-| kinesis-streams\_endpoint\_enable | Enable/Disable the kinesis-streams VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
-| kinesis-streams\_private\_dns\_enable | Enable/Disable private dns on the kinesis-streams endpoint. Allowed values: true, false | string | `"false"` | no |
+| execute\_api\_endpoint\_enable | Enable/Disable the execute-api VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
+| execute\_api\_private\_dns\_enable | Enable/Disable private dns on the execute-api endpoint. Allowed values: true, false | string | `"false"` | no |
+| kinesis\_streams\_endpoint\_enable | Enable/Disable the kinesis-streams VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
+| kinesis\_streams\_private\_dns\_enable | Enable/Disable private dns on the kinesis-streams endpoint. Allowed values: true, false | string | `"false"` | no |
 | kms\_endpoint\_enable | Enable/Disable the kms VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
 | kms\_private\_dns\_enable | Enable/Disable private dns on the kms endpoint. Allowed values: true, false | string | `"false"` | no |
 | logs\_endpoint\_enable | Enable/Disable the logs VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
@@ -60,29 +66,30 @@ Full working references are available at [examples](examples)
 | ssm\_endpoint\_enable | Enable/Disable the ssm VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
 | ssm\_private\_dns\_enable | Enable/Disable private dns on the ssm endpoint. Allowed values: true, false | string | `"false"` | no |
 | subnet\_ids\_list | List of Subnets to assoicate with Inteface endpoints. | list | `<list>` | no |
+| tags | Custom tags to apply to all resources. | map | `<map>` | no |
 | vpc\_id | Provide Virtual Private Cloud ID | string | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| codebuild-fips\_vpc\_endpoint\_id | Codebuild-fips vpc endpoint ID |
-| codebuild\_vpc\_endpoint\_id | Codebuild vpc endpoint ID |
-| dynamodb\_vpc\_endpoint\_id | S3 dynamodb endpoint ID |
-| ec2\_vpc\_endpoint\_id | EC2 vpc endpoint ID |
-| ec2messages\_vpc\_endpoint\_id | EC2messages vpc endpoint ID |
-| elasticloadbalancing\_vpc\_endpoint\_id | Elasticloadbalancing vpc endpoint ID |
-| events\_vpc\_endpoint\_id | Events vpc endpoint ID |
-| execute-api\_vpc\_endpoint\_id | Execute-api vpc endpoint ID |
-| kinesis-streams\_vpc\_endpoint\_id | Kinesis-streams vpc endpoint ID |
-| kms\_vpc\_endpoint\_id | Kms vpc endpoint ID |
-| logs\_vpc\_endpoint\_id | Logs vpc endpoint ID |
-| monitoring\_vpc\_endpoint\_id | Monitoring vpc endpoint ID |
-| s3\_vpc\_endpoint\_id | S3 vpc endpoint ID |
-| sagemaker\_runtime\_vpc\_endpoint\_id | Sagemaker.runtime vpc endpoint ID |
-| secretsmanager\_vpc\_endpoint\_id | Secretsmanager vpc endpoint ID |
-| servicecatalog\_vpc\_endpoint\_id | Servicecatalog vpc endpoint ID |
-| sns\_vpc\_endpoint\_id | SNS vpc endpoint ID |
-| sqs\_vpc\_endpoint\_id | SQS vpc endpoint ID |
-| ssm\_vpc\_endpoint\_id | SSM vpc endpoint ID |
+| codebuild\_fips\_vpc\_endpoint\_id | CodeBuild-fips VPC endpoint ID |
+| codebuild\_vpc\_endpoint\_id | CodeBuild VPC endpoint ID |
+| dynamodb\_vpc\_endpoint\_id | DynamoDB VPC endpoint ID |
+| ec2\_vpc\_endpoint\_id | EC2 VPC endpoint ID |
+| ec2messages\_vpc\_endpoint\_id | EC2messages VPC endpoint ID |
+| elasticloadbalancing\_vpc\_endpoint\_id | Elasticloadbalancing VPC endpoint ID |
+| events\_vpc\_endpoint\_id | Events VPC endpoint ID |
+| execute\_api\_vpc\_endpoint\_id | Execute-api VPC endpoint ID |
+| kinesis\_streams\_vpc\_endpoint\_id | Kinesis-streams VPC endpoint ID |
+| kms\_vpc\_endpoint\_id | Kms VPC endpoint ID |
+| logs\_vpc\_endpoint\_id | Logs VPC endpoint ID |
+| monitoring\_vpc\_endpoint\_id | Monitoring VPC endpoint ID |
+| s3\_vpc\_endpoint\_id | S3 VPC endpoint ID |
+| sagemaker\_runtime\_vpc\_endpoint\_id | Sagemaker.runtime VPC endpoint ID |
+| secretsmanager\_vpc\_endpoint\_id | Secretsmanager VPC endpoint ID |
+| servicecatalog\_vpc\_endpoint\_id | Servicecatalog VPC endpoint ID |
+| sns\_vpc\_endpoint\_id | SNS VPC endpoint ID |
+| sqs\_vpc\_endpoint\_id | SQS VPC endpoint ID |
+| ssm\_vpc\_endpoint\_id | SSM VPC endpoint ID |
 
