@@ -32,33 +32,33 @@ resource "random_string" "identifier" {
 module "base_network" {
   source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=master"
 
-  vpc_name = "VPC-Endpoint-${random_string.identifier.result}"
+  name = "VPC-Endpoint-${random_string.identifier.result}"
 }
 
 resource "aws_security_group" "vpc_endpoint" {
-  name_prefix = "${random_string.identifier.result}-VpcEndpointSecurityGroup"
   description = "VPC Endpoint Security Group"
+  name_prefix = "${random_string.identifier.result}-VpcEndpointSecurityGroup"
   vpc_id      = module.base_network.vpc_id
 
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 80
+    protocol    = "tcp"
+    to_port     = 80
+  }
+
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 443
+    protocol    = "tcp"
+    to_port     = 443
   }
 
   tags = merge(
@@ -100,13 +100,13 @@ module "vpc_endpoint" {
   logs_private_dns_enable                 = true
   monitoring_endpoint_enable              = true
   monitoring_private_dns_enable           = true
-  route_tables                   = module.base_network.private_route_tables
+  route_tables                            = module.base_network.private_route_tables
   s3_endpoint_enable                      = true
   sagemaker_runtime_endpoint_enable       = true
   sagemaker_runtime_private_dns_enable    = true
   secretsmanager_endpoint_enable          = true
   secretsmanager_private_dns_enable       = true
-  security_groups                 = [aws_security_group.vpc_endpoint.id]
+  security_groups                         = [aws_security_group.vpc_endpoint.id]
   servicecatalog_endpoint_enable          = true
   servicecatalog_private_dns_enable       = true
   sns_endpoint_enable                     = true
@@ -115,7 +115,7 @@ module "vpc_endpoint" {
   sqs_private_dns_enable                  = true
   ssm_endpoint_enable                     = true
   ssm_private_dns_enable                  = true
-  subnets                         = module.base_network.private_subnets
+  subnets                                 = module.base_network.private_subnets
   tags                                    = local.tags
   vpc_id                                  = module.base_network.vpc_id
 }

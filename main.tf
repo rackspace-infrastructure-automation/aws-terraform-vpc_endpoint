@@ -7,17 +7,16 @@
  *
  * ```HCL
  * module "vpc_endpoint" {
- *   source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.0.6"
+ *   source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.0"
  *
  *   dynamo_db_endpoint_enable = true
+ *   s3_endpoint_enable        = true
+ *   vpc_id                    = "${module.base_network.vpc_id}"
  *
  *   route_tables = concat(
  *     module.base_network.private_route_tables,
  *     module.base_network.public_route_tables
  *   )
- *
- *   s3_endpoint_enable        = true
- *   vpc_id                    = "${module.base_network.vpc_id}"
  * }
  * ```
  *
