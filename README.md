@@ -22,6 +22,19 @@ module "vpc_endpoint" {
 
 Full working references are available at [examples](examples)
 
+## Terraform 0.12 upgrade
+
+Several changes were required while adding terraform 0.12 compatibility.  The following changes should
+made when upgrading from a previous release to version 0.12.0 or higher.
+
+### Module variables
+
+The following module variables were updated to better meet current Rackspace style guides:
+
+- `route_tables_ids_list` -> `route_tables`
+- `security_group_ids_list` -> `security_groups`
+- `subnet_ids_list` -> `subnets`
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -50,13 +63,13 @@ Full working references are available at [examples](examples)
 | logs\_private\_dns\_enable | Enable/Disable private dns on the logs endpoint. Allowed values: true, false | string | `"false"` | no |
 | monitoring\_endpoint\_enable | Enable/Disable the monitoring VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
 | monitoring\_private\_dns\_enable | Enable/Disable private dns on the monitoring endpoint. Allowed values: true, false | string | `"false"` | no |
-| route\_tables\_ids\_list | List of Route Table ID's for each AZ | list | `<list>` | no |
+| route\_tables | List of Route Table ID's for each AZ | list | `<list>` | no |
 | s3\_endpoint\_enable | Enable/Disable the S3 VPC Endpoint. Allowed values: true, false | string | `"true"` | no |
 | sagemaker\_runtime\_endpoint\_enable | Enable/Disable the sagemaker.runtime VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
 | sagemaker\_runtime\_private\_dns\_enable | Enable/Disable private dns on the sagemaker.runtime endpoint. Allowed values: true, false | string | `"false"` | no |
 | secretsmanager\_endpoint\_enable | Enable/Disable the secretsmanager VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
 | secretsmanager\_private\_dns\_enable | Enable/Disable private dns on the secretsmanager endpoint. Allowed values: true, false | string | `"false"` | no |
-| security\_group\_ids\_list | List of Security Group ID's for the endpoints. | list | `<list>` | no |
+| security\_groups | List of Security Group ID's for the endpoints. | list | `<list>` | no |
 | servicecatalog\_endpoint\_enable | Enable/Disable the servicecatalog VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
 | servicecatalog\_private\_dns\_enable | Enable/Disable private dns on the servicecatalog endpoint. Allowed values: true, false | string | `"false"` | no |
 | sns\_endpoint\_enable | Enable/Disable the sns VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
@@ -65,7 +78,7 @@ Full working references are available at [examples](examples)
 | sqs\_private\_dns\_enable | Enable/Disable private dns on the sqs endpoint. Allowed values: true, false | string | `"false"` | no |
 | ssm\_endpoint\_enable | Enable/Disable the ssm VPC Endpoint. Allowed values: true, false | string | `"false"` | no |
 | ssm\_private\_dns\_enable | Enable/Disable private dns on the ssm endpoint. Allowed values: true, false | string | `"false"` | no |
-| subnet\_ids\_list | List of Subnets to assoicate with Inteface endpoints. | list | `<list>` | no |
+| subnets | List of Subnets to assoicate with Inteface endpoints. | list | `<list>` | no |
 | tags | Custom tags to apply to all resources. | map | `<map>` | no |
 | vpc\_id | Provide Virtual Private Cloud ID | string | n/a | yes |
 
@@ -92,4 +105,3 @@ Full working references are available at [examples](examples)
 | sns\_vpc\_endpoint\_id | SNS VPC endpoint ID |
 | sqs\_vpc\_endpoint\_id | SQS VPC endpoint ID |
 | ssm\_vpc\_endpoint\_id | SSM VPC endpoint ID |
-

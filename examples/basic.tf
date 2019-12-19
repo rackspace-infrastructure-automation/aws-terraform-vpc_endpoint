@@ -17,7 +17,7 @@ module "vpc_endpoint" {
   source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.0.6"
 
   dynamo_db_endpoint_enable = true
-  route_tables_ids_list     = module.base_network.private_route_tables
+  route_tables     = module.base_network.private_route_tables
   s3_endpoint_enable        = true
   vpc_id                    = module.base_network.vpc_id
 }

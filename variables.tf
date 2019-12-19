@@ -145,7 +145,7 @@ variable "monitoring_private_dns_enable" {
   default     = false
 }
 
-variable "route_tables_ids_list" {
+variable "route_tables" {
   description = "List of Route Table ID's for each AZ"
   type        = list(string)
   default     = []
@@ -181,7 +181,7 @@ variable "secretsmanager_private_dns_enable" {
   default     = false
 }
 
-variable "security_group_ids_list" {
+variable "security_groups" {
   description = "List of Security Group ID's for the endpoints."
   type        = list(string)
   default     = []
@@ -237,7 +237,7 @@ variable "ssm_private_dns_enable" {
   type        = bool
   default     = false
 }
-variable "subnet_ids_list" {
+variable "subnets" {
   description = "List of Subnets to assoicate with Inteface endpoints."
   type        = list(string)
   default     = []

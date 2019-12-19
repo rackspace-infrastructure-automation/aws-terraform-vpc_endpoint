@@ -100,13 +100,13 @@ module "vpc_endpoint" {
   logs_private_dns_enable                 = true
   monitoring_endpoint_enable              = true
   monitoring_private_dns_enable           = true
-  route_tables_ids_list                   = module.base_network.private_route_tables
+  route_tables                   = module.base_network.private_route_tables
   s3_endpoint_enable                      = true
   sagemaker_runtime_endpoint_enable       = true
   sagemaker_runtime_private_dns_enable    = true
   secretsmanager_endpoint_enable          = true
   secretsmanager_private_dns_enable       = true
-  security_group_ids_list                 = [aws_security_group.vpc_endpoint.id]
+  security_groups                 = [aws_security_group.vpc_endpoint.id]
   servicecatalog_endpoint_enable          = true
   servicecatalog_private_dns_enable       = true
   sns_endpoint_enable                     = true
@@ -115,7 +115,7 @@ module "vpc_endpoint" {
   sqs_private_dns_enable                  = true
   ssm_endpoint_enable                     = true
   ssm_private_dns_enable                  = true
-  subnet_ids_list                         = module.base_network.private_subnets
+  subnets                         = module.base_network.private_subnets
   tags                                    = local.tags
   vpc_id                                  = module.base_network.vpc_id
 }
