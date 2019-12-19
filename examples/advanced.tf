@@ -1,5 +1,9 @@
+terraform {
+  required_version = ">= 0.12"
+}
+
 provider "aws" {
-  version = "~> 1.2"
+  version = "~> 2.2"
   region  = "us-west-2"
 }
 
@@ -13,7 +17,7 @@ module "security_groups" {
   source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-security_group?ref=v0.0.5"
 
   resource_name = "test_sg"
-  vpc_id        = "${module.base_network.vpc_id}"
+  vpc_id        = module.base_network.vpc_id
 }
 
 module "vpc_endpoint" {
@@ -43,17 +47,17 @@ module "vpc_endpoint" {
   monitoring_endpoint_enable              = true
   monitoring_private_dns_enable           = true
 
-  route_tables_ids_list = "${concat(
+  route_tables_ids_list = concat(
     module.base_network.private_route_tables,
-    module.base_network.public_route_tables
-  )}"
+    module.base_network.public_route_tables,
+  )
 
   s3_endpoint_enable                   = true
   sagemaker_runtime_endpoint_enable    = true
   sagemaker_runtime_private_dns_enable = true
   secretsmanager_endpoint_enable       = true
   secretsmanager_private_dns_enable    = true
-  security_group_ids_list              = ["${module.security_groups.vpc_endpoint_security_group_id}"]
+  security_group_ids_list              = [module.security_groups.vpc_endpoint_security_group_id]
   servicecatalog_endpoint_enable       = true
   servicecatalog_private_dns_enable    = true
   sns_endpoint_enable                  = true
@@ -62,6 +66,6 @@ module "vpc_endpoint" {
   sqs_private_dns_enable               = true
   ssm_endpoint_enable                  = true
   ssm_private_dns_enable               = true
-  subnet_ids_list                      = "${module.base_network.private_subnets}"
-  vpc_id                               = "${module.base_network.vpc_id}"
+  subnet_ids_list                      = module.base_network.private_subnets
+  vpc_id                               = module.base_network.vpc_id
 }

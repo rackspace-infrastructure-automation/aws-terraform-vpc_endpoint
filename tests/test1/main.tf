@@ -1,3 +1,7 @@
+terraform {
+  required_version = ">= 0.12"
+}
+
 provider "aws" {
   version = "~> 2.35"
   region  = "us-west-2"
@@ -10,7 +14,7 @@ provider "random" {
 locals {
   tags = {
     Environment     = "Test"
-    Identifier      = "${random_string.identifier.result}"
+    Identifier      = random_string.identifier.result
     Purpose         = "Testing aws-terraform-vpc_endpoint"
     ServiceProvider = "Rackspace"
     Terraform       = "true"
@@ -34,7 +38,7 @@ module "base_network" {
 resource "aws_security_group" "vpc_endpoint" {
   name_prefix = "${random_string.identifier.result}-VpcEndpointSecurityGroup"
   description = "VPC Endpoint Security Group"
-  vpc_id      = "${module.base_network.vpc_id}"
+  vpc_id      = module.base_network.vpc_id
 
   ingress {
     from_port   = 80
@@ -57,10 +61,12 @@ resource "aws_security_group" "vpc_endpoint" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = "${merge(
+  tags = merge(
     local.tags,
-    map("Name", "${random_string.identifier.result}-VpcEndpointSecurityGroup")
-  )}"
+    {
+      "Name" = "${random_string.identifier.result}-VpcEndpointSecurityGroup"
+    },
+  )
 
   lifecycle {
     create_before_destroy = true
@@ -81,7 +87,7 @@ module "vpc_endpoint" {
   ec2messages_private_dns_enable          = true
   elasticloadbalancing_endpoint_enable    = true
   elasticloadbalancing_private_dns_enable = true
-  environment                             = "${lookup(local.tags, "Environment")}"
+  environment                             = local.tags["Environment"]
   events_endpoint_enable                  = true
   events_private_dns_enable               = true
   execute_api_endpoint_enable             = true
@@ -94,13 +100,13 @@ module "vpc_endpoint" {
   logs_private_dns_enable                 = true
   monitoring_endpoint_enable              = true
   monitoring_private_dns_enable           = true
-  route_tables_ids_list                   = "${module.base_network.private_route_tables}"
+  route_tables_ids_list                   = module.base_network.private_route_tables
   s3_endpoint_enable                      = true
   sagemaker_runtime_endpoint_enable       = true
   sagemaker_runtime_private_dns_enable    = true
   secretsmanager_endpoint_enable          = true
   secretsmanager_private_dns_enable       = true
-  security_group_ids_list                 = ["${aws_security_group.vpc_endpoint.id}"]
+  security_group_ids_list                 = [aws_security_group.vpc_endpoint.id]
   servicecatalog_endpoint_enable          = true
   servicecatalog_private_dns_enable       = true
   sns_endpoint_enable                     = true
@@ -109,7 +115,7 @@ module "vpc_endpoint" {
   sqs_private_dns_enable                  = true
   ssm_endpoint_enable                     = true
   ssm_private_dns_enable                  = true
-  subnet_ids_list                         = "${module.base_network.private_subnets}"
-  tags                                    = "${local.tags}"
-  vpc_id                                  = "${module.base_network.vpc_id}"
+  subnet_ids_list                         = module.base_network.private_subnets
+  tags                                    = local.tags
+  vpc_id                                  = module.base_network.vpc_id
 }
