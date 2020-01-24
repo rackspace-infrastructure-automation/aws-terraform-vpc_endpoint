@@ -1,23 +1,27 @@
+terraform {
+  required_version = ">= 0.12"
+}
+
 provider "aws" {
-  version = "~> 1.2"
+  version = "~> 2.2"
   region  = "us-west-2"
 }
 
 module "base_network" {
-  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.0.10"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.12.0"
 
-  vpc_name = "VPC-Endpoint-Test"
+  name = "VPC-Endpoint-Test"
 }
 
 module "security_groups" {
-  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-security_group?ref=v0.0.5"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-security_group?ref=v0.12.0"
 
-  resource_name = "test_sg"
-  vpc_id        = "${module.base_network.vpc_id}"
+  name   = "test_sg"
+  vpc_id = module.base_network.vpc_id
 }
 
 module "vpc_endpoint" {
-  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.0.6"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.0"
 
   codebuild_endpoint_enable               = true
   codebuild_private_dns_enable            = true
@@ -42,26 +46,25 @@ module "vpc_endpoint" {
   logs_private_dns_enable                 = true
   monitoring_endpoint_enable              = true
   monitoring_private_dns_enable           = true
+  s3_endpoint_enable                      = true
+  sagemaker_runtime_endpoint_enable       = true
+  sagemaker_runtime_private_dns_enable    = true
+  secretsmanager_endpoint_enable          = true
+  secretsmanager_private_dns_enable       = true
+  security_groups                         = [module.security_groups.vpc_endpoint_security_group_id]
+  servicecatalog_endpoint_enable          = true
+  servicecatalog_private_dns_enable       = true
+  sns_endpoint_enable                     = true
+  sns_private_dns_enable                  = true
+  sqs_endpoint_enable                     = true
+  sqs_private_dns_enable                  = true
+  ssm_endpoint_enable                     = true
+  ssm_private_dns_enable                  = true
+  subnets                                 = module.base_network.private_subnets
+  vpc_id                                  = module.base_network.vpc_id
 
-  route_tables_ids_list = "${concat(
+  route_tables = concat(
     module.base_network.private_route_tables,
-    module.base_network.public_route_tables
-  )}"
-
-  s3_endpoint_enable                   = true
-  sagemaker_runtime_endpoint_enable    = true
-  sagemaker_runtime_private_dns_enable = true
-  secretsmanager_endpoint_enable       = true
-  secretsmanager_private_dns_enable    = true
-  security_group_ids_list              = ["${module.security_groups.vpc_endpoint_security_group_id}"]
-  servicecatalog_endpoint_enable       = true
-  servicecatalog_private_dns_enable    = true
-  sns_endpoint_enable                  = true
-  sns_private_dns_enable               = true
-  sqs_endpoint_enable                  = true
-  sqs_private_dns_enable               = true
-  ssm_endpoint_enable                  = true
-  ssm_private_dns_enable               = true
-  subnet_ids_list                      = "${module.base_network.private_subnets}"
-  vpc_id                               = "${module.base_network.vpc_id}"
+    module.base_network.public_route_tables,
+  )
 }
