@@ -3,7 +3,7 @@ terraform {
 }
 
 provider "aws" {
-  version = "~> 2.35"
+  version = "~> 2.7"
   region  = "us-west-2"
 }
 
@@ -30,14 +30,20 @@ resource "random_string" "identifier" {
 }
 
 module "base_network" {
-  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=master"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.12.1"
 
-  name = "VPC-Endpoint-${random_string.identifier.result}"
+  name = "VPC1-Endpoint-${random_string.identifier.result}"
+}
+
+module "base_network_2" {
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.12.1"
+
+  name = "VPC2-Endpoint-${random_string.identifier.result}"
 }
 
 resource "aws_security_group" "vpc_endpoint" {
-  description = "VPC Endpoint Security Group"
-  name_prefix = "${random_string.identifier.result}-VpcEndpointSecurityGroup"
+  description = "VPC1 Endpoint Security Group"
+  name_prefix = "${random_string.identifier.result}-VpcEndpointSecurityGroup-1"
   vpc_id      = module.base_network.vpc_id
 
   egress {
@@ -64,7 +70,7 @@ resource "aws_security_group" "vpc_endpoint" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${random_string.identifier.result}-VpcEndpointSecurityGroup"
+      "Name" = "${random_string.identifier.result}-VpcEndpointSecurityGroup-1"
     },
   )
 
@@ -73,6 +79,45 @@ resource "aws_security_group" "vpc_endpoint" {
   }
 }
 
+resource "aws_security_group" "vpc_endpoint_2" {
+  description = "VPC2 Endpoint Security Group"
+  name_prefix = "${random_string.identifier.result}-VpcEndpointSecurityGroup-2"
+  vpc_id      = module.base_network_2.vpc_id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 80
+    protocol    = "tcp"
+    to_port     = 80
+  }
+
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 443
+    protocol    = "tcp"
+    to_port     = 443
+  }
+
+  tags = merge(
+    local.tags,
+    {
+      "Name" = "${random_string.identifier.result}-VpcEndpointSecurityGroup-2"
+    },
+  )
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+#legacy
 module "vpc_endpoint" {
   source = "../../module"
 
@@ -119,3 +164,21 @@ module "vpc_endpoint" {
   tags                                    = local.tags
   vpc_id                                  = module.base_network.vpc_id
 }
+
+# new style implementation
+module "vpc_endpoint_2" {
+  source = "../../module"
+
+  dynamo_db_endpoint_enable = false
+  enable_private_dns_list   = ["codebuild", "ec2", "ec2messages", "elasticloadbalancing", "events", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]
+  environment               = local.tags["Environment"]
+  gateway_endpoints         = ["s3", "dynamodb"]
+  interface_endpoints       = ["codebuild", "ec2", "ec2messages", "elasticloadbalancing", "events", "execute-api", "kinesis-streams", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]
+  route_tables              = module.base_network_2.private_route_tables
+  security_groups           = [aws_security_group.vpc_endpoint_2.id]
+  s3_endpoint_enable        = false
+  subnets                   = module.base_network_2.private_subnets
+  tags                      = local.tags
+  vpc_id                    = module.base_network_2.vpc_id
+}
+

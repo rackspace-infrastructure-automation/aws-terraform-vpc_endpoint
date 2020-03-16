@@ -67,6 +67,12 @@ variable "elasticloadbalancing_private_dns_enable" {
   default     = false
 }
 
+variable "enable_private_dns_list" {
+  description = "List of Interface endpoints that should have private DNS enabled.  This should be a subset of the list for interface endpoints to provision."
+  type        = list(string)
+  default     = []
+}
+
 variable "environment" {
   description = "Application environment for which this network is being created. one of: ('Development', 'Integration', 'PreProduction', 'Production', 'QA', 'Staging', 'Test')"
   type        = string
@@ -95,6 +101,17 @@ variable "execute_api_private_dns_enable" {
   description = "Enable/Disable private dns on the execute-api endpoint. Allowed values: true, false"
   type        = bool
   default     = false
+}
+variable "gateway_endpoints" {
+  description = "List of gateway endpoints to enable. e.g. `[\"dynamodb\",\"s3\"]`. The complete list can be found here: https://docs.aws.amazon.com/vpc/latest/userguide/vpce-gateway.html . To date only `s3` and `dynamodb` exist. Also note for backward compatibiity, `s3_endpoint_enable` and `dynamo_db_endpoint_enable` default to `true` so if using this method, those need to be explicitly set to `false`."
+  type        = list(string)
+  default     = []
+}
+
+variable "interface_endpoints" {
+  description = "List of interface endpoints to enable. e.g. `[\"codebuild\",\"ec2\"]`. The complete list can be found here: https://docs.aws.amazon.com/vpc/latest/userguide/vpce-interface.html."
+  type        = list(string)
+  default     = []
 }
 
 variable "kinesis_streams_endpoint_enable" {

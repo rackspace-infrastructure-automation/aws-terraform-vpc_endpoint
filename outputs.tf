@@ -28,6 +28,11 @@ output "elasticloadbalancing_vpc_endpoint_id" {
   value       = element(coalescelist(aws_vpc_endpoint.elasticloadbalancing_endpoint.*.id, [""]), 0)
 }
 
+output "endpoint_ids" {
+  description = "Combined List of gateWay and Interface IDs"
+  value       = concat(aws_vpc_endpoint.interface.*.id, aws_vpc_endpoint.gateway.*.id)
+}
+
 output "events_vpc_endpoint_id" {
   description = "Events VPC endpoint ID"
   value       = element(coalescelist(aws_vpc_endpoint.events_endpoint.*.id, [""]), 0)

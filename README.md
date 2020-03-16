@@ -4,9 +4,33 @@ This module builds VPC endpoints based on the inputs.
 
 ## Basic Usage
 
+### New Style (uses `for_each` resource parameter)
+
 ```HCL
 module "vpc_endpoint" {
-  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.0"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.1"
+
+  dynamo_db_endpoint_enable = false
+  enable_private_dns_list   = ["codebuild", "ec2", "ec2messages", "elasticloadbalancing", "events", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]
+  gateway_endpoints         = ["s3", "dynamodb"]
+  interface_endpoints       = ["codebuild", "ec2", "ec2messages", "elasticloadbalancing", "events", "execute-api", "kinesis-streams", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]
+  security_groups           = [module.security_groups.vpc_endpoint_security_group_id]
+  subnets                   = module.base_network.private_subnets
+  s3_endpoint_enable        = false
+  vpc_id                    = module.base_network.vpc_id
+
+ route_tables = concat(
+    module.base_network.private_route_tables,
+    module.base_network.public_route_tables,
+ )
+}
+```
+
+### Legacy (uses boolean toggles per endpoint)
+
+```HCL
+module "vpc_endpoint" {
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.1"
 
   dynamo_db_endpoint_enable = true
   s3_endpoint_enable        = true
@@ -30,15 +54,24 @@ made when upgrading from a previous release to version 0.12.0 or higher.
 
 The following module variables were updated to better meet current Rackspace style guides:
 
-- `route_tables_ids_list` -> `route_tables`  
-- `security_group_ids_list` -> `security_groups`  
+- `route_tables_ids_list` -> `route_tables`
+- `security_group_ids_list` -> `security_groups`
 - `subnet_ids_list` -> `subnets`
+
+From version 0.12.1, the following changes have occurred:
+#### Deprecations
+- All of the boolean "enable" variables such as `events_endpoint_enable` and `events_private_dns_enable` are marked for deprecation to accomodate a more compact and Terraform 0.12 friendly configuration. They will be removed in a future release. In lieu of these, please see the Additions section.
+
+#### Additions
+- `gateway_endpoints` - introduced as a single variable to replace all "enable" Gatway booleans. It is a list of gateway servicenames.
+- `interface_endpoints` - introduced as a single variable to replace all "enable" Interface booleans. It is a list of interface servicenames.
+- `enable_private_dns_list` - introduced as a single variable to replace all of the "enable" Private DNS Interface booleans.  It is a list of interface servicenames.
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | >= 2.1.0 |
+| aws | >= 2.7.0 |
 
 ## Inputs
 
@@ -55,11 +88,14 @@ The following module variables were updated to better meet current Rackspace sty
 | ec2messages\_private\_dns\_enable | Enable/Disable private dns on the ec2messages endpoint. Allowed values: true, false | `bool` | `false` | no |
 | elasticloadbalancing\_endpoint\_enable | Enable/Disable the elasticloadbalancing VPC Endpoint. Allowed values: true, false | `bool` | `false` | no |
 | elasticloadbalancing\_private\_dns\_enable | Enable/Disable private dns on the elasticloadbalancing endpoint. Allowed values: true, false | `bool` | `false` | no |
+| enable\_private\_dns\_list | List of Interface endpoints that should have private DNS enabled.  This should be a subset of the list for interface endpoints to provision. | `list(string)` | `[]` | no |
 | environment | Application environment for which this network is being created. one of: ('Development', 'Integration', 'PreProduction', 'Production', 'QA', 'Staging', 'Test') | `string` | `"Development"` | no |
 | events\_endpoint\_enable | Enable/Disable the events VPC Endpoint. Allowed values: true, false | `bool` | `false` | no |
 | events\_private\_dns\_enable | Enable/Disable private dns on the events endpoint. Allowed values: true, false | `bool` | `false` | no |
 | execute\_api\_endpoint\_enable | Enable/Disable the execute-api VPC Endpoint. Allowed values: true, false | `bool` | `false` | no |
 | execute\_api\_private\_dns\_enable | Enable/Disable private dns on the execute-api endpoint. Allowed values: true, false | `bool` | `false` | no |
+| gateway\_endpoints | List of gateway endpoints to enable. e.g. `["dynamodb","s3"]`. The complete list can be found here: https://docs.aws.amazon.com/vpc/latest/userguide/vpce-gateway.html . To date only `s3` and `dynamodb` exist. Also note for backward compatibiity, `s3_endpoint_enable` and `dynamo_db_endpoint_enable` default to `true` so if using this method, those need to be explicitly set to `false`. | `list(string)` | `[]` | no |
+| interface\_endpoints | List of interface endpoints to enable. e.g. `["codebuild","ec2"]`. The complete list can be found here: https://docs.aws.amazon.com/vpc/latest/userguide/vpce-interface.html. | `list(string)` | `[]` | no |
 | kinesis\_streams\_endpoint\_enable | Enable/Disable the kinesis-streams VPC Endpoint. Allowed values: true, false | `bool` | `false` | no |
 | kinesis\_streams\_private\_dns\_enable | Enable/Disable private dns on the kinesis-streams endpoint. Allowed values: true, false | `bool` | `false` | no |
 | kms\_endpoint\_enable | Enable/Disable the kms VPC Endpoint. Allowed values: true, false | `bool` | `false` | no |
@@ -97,6 +133,7 @@ The following module variables were updated to better meet current Rackspace sty
 | ec2\_vpc\_endpoint\_id | EC2 VPC endpoint ID |
 | ec2messages\_vpc\_endpoint\_id | EC2messages VPC endpoint ID |
 | elasticloadbalancing\_vpc\_endpoint\_id | Elasticloadbalancing VPC endpoint ID |
+| endpoint\_ids | Combined List of gateWay and Interface IDs |
 | events\_vpc\_endpoint\_id | Events VPC endpoint ID |
 | execute\_api\_vpc\_endpoint\_id | Execute-api VPC endpoint ID |
 | kinesis\_streams\_vpc\_endpoint\_id | Kinesis-streams VPC endpoint ID |
