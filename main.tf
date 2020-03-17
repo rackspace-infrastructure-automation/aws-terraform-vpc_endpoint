@@ -1,13 +1,37 @@
-/**
+/*
  * # aws-terraform-vpc_endpoint
  *
  * This module builds VPC endpoints based on the inputs.
  *
  * ## Basic Usage
  *
+ * ### New Style (uses `for_each` resource parameter)
+ *
  * ```HCL
  * module "vpc_endpoint" {
- *   source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.0"
+ *   source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.1"
+ *
+ *   dynamo_db_endpoint_enable = false
+ *   enable_private_dns_list   = ["codebuild", "ec2", "ec2messages", "elasticloadbalancing", "events", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]
+ *   gateway_endpoints         = ["s3", "dynamodb"]
+ *   interface_endpoints       = ["codebuild", "ec2", "ec2messages", "elasticloadbalancing", "events", "execute-api", "kinesis-streams", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]
+ *   security_groups           = [module.security_groups.vpc_endpoint_security_group_id]
+ *   subnets                   = module.base_network.private_subnets
+ *   s3_endpoint_enable        = false
+ *   vpc_id                    = module.base_network.vpc_id
+ *
+ *  route_tables = concat(
+ *     module.base_network.private_route_tables,
+ *     module.base_network.public_route_tables,
+ *  )
+ * }
+ * ```
+ *
+ * ### Legacy (uses boolean toggles per endpoint)
+ *
+ * ```HCL
+ * module "vpc_endpoint" {
+ *   source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.1"
  *
  *   dynamo_db_endpoint_enable = true
  *   s3_endpoint_enable        = true
@@ -22,25 +46,34 @@
  *
  * Full working references are available at [examples](examples)
  *
- *## Terraform 0.12 upgrade
+ * ## Terraform 0.12 upgrade
  *
- *Several changes were required while adding terraform 0.12 compatibility.  The following changes should be
- *made when upgrading from a previous release to version 0.12.0 or higher.
+ * Several changes were required while adding terraform 0.12 compatibility.  The following changes should be
+ * made when upgrading from a previous release to version 0.12.0 or higher.
  *
- *### Module variables
+ * ### Module variables
  *
- *The following module variables were updated to better meet current Rackspace style guides:
+ * The following module variables were updated to better meet current Rackspace style guides:
  *
- *- `route_tables_ids_list` -> `route_tables`
- *- `security_group_ids_list` -> `security_groups`
- *- `subnet_ids_list` -> `subnets`
+ * - `route_tables_ids_list` -> `route_tables`
+ * - `security_group_ids_list` -> `security_groups`
+ * - `subnet_ids_list` -> `subnets`
+ * 
+ * From version 0.12.1, the following changes have occurred:
+ * #### Deprecations
+ * - All of the boolean "enable" variables such as `events_endpoint_enable` and `events_private_dns_enable` are marked for deprecation to accomodate a more compact and Terraform 0.12 friendly configuration. They will be removed in a future release. In lieu of these, please see the Additions section.
+ *
+ * #### Additions
+ * - `gateway_endpoints` - introduced as a single variable to replace all "enable" Gatway booleans. It is a list of gateway servicenames.
+ * - `interface_endpoints` - introduced as a single variable to replace all "enable" Interface booleans. It is a list of interface servicenames.
+ * - `enable_private_dns_list` - introduced as a single variable to replace all of the "enable" Private DNS Interface booleans.  It is a list of interface servicenames.
  */
 
 terraform {
   required_version = ">= 0.12"
 
   required_providers {
-    aws = ">= 2.1.0"
+    aws = ">= 2.7.0"
   }
 }
 
@@ -51,6 +84,7 @@ locals {
   }
 
   merged_tags = merge(local.tags, var.tags)
+
 }
 
 data "aws_region" "current_region" {}
@@ -295,3 +329,33 @@ resource "aws_vpc_endpoint" "ssm_endpoint" {
   vpc_endpoint_type   = "Interface"
   vpc_id              = var.vpc_id
 }
+
+
+# Gateways (s3 , dynamodb)
+resource "aws_vpc_endpoint" "gateway" {
+  for_each = toset(var.gateway_endpoints)
+
+  route_table_ids   = var.route_tables
+  service_name      = "com.amazonaws.${data.aws_region.current_region.name}.${each.key}"
+  tags              = local.merged_tags
+  vpc_endpoint_type = "Gateway"
+  vpc_id            = var.vpc_id
+}
+
+
+# Interface endpoints
+# (codebuild, codebuild-fips, ec2, ec2messages, elasticloadbalancing, events,execute-api,
+# kinesis-streams, kms, logs,monitoring,sagemaker.runtime,secretsmanager,servicecatalog,sns,sqs,ssm)
+resource "aws_vpc_endpoint" "interface" {
+  for_each = toset(var.interface_endpoints)
+
+  private_dns_enabled = contains(var.enable_private_dns_list, each.key) ? true : false
+  security_group_ids  = var.security_groups
+  service_name        = "com.amazonaws.${data.aws_region.current_region.name}.${each.key}"
+  subnet_ids          = var.subnets
+  tags                = local.merged_tags
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = var.vpc_id
+
+}
+
