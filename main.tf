@@ -58,7 +58,7 @@
  * - `route_tables_ids_list` -> `route_tables`
  * - `security_group_ids_list` -> `security_groups`
  * - `subnet_ids_list` -> `subnets`
- * 
+ *
  * From version 0.12.1, the following changes have occurred:
  * #### Deprecations
  * - All of the boolean "enable" variables such as `events_endpoint_enable` and `events_private_dns_enable` are marked for deprecation to accomodate a more compact and Terraform 0.12 friendly configuration. They will be removed in a future release. In lieu of these, please see the Additions section.
@@ -356,6 +356,4 @@ resource "aws_vpc_endpoint" "interface" {
   tags                = local.merged_tags
   vpc_endpoint_type   = "Interface"
   vpc_id              = var.vpc_id
-
 }
-
