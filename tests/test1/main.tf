@@ -41,6 +41,12 @@ module "base_network_2" {
   name = "VPC2-Endpoint-${random_string.identifier.result}"
 }
 
+module "base_network_3" {
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.12.1"
+
+  name = "VPC3-Endpoint-${random_string.identifier.result}"
+}
+
 resource "aws_security_group" "vpc_endpoint" {
   description = "VPC1 Endpoint Security Group"
   name_prefix = "${random_string.identifier.result}-VpcEndpointSecurityGroup-1"
@@ -117,14 +123,52 @@ resource "aws_security_group" "vpc_endpoint_2" {
   }
 }
 
+resource "aws_security_group" "vpc_endpoint_3" {
+  description = "VPC3 Endpoint Security Group"
+  name_prefix = "${random_string.identifier.result}-VpcEndpointSecurityGroup-3"
+  vpc_id      = module.base_network_3.vpc_id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+  }
+
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 80
+    protocol    = "tcp"
+    to_port     = 80
+  }
+
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 443
+    protocol    = "tcp"
+    to_port     = 443
+  }
+
+  tags = merge(
+    local.tags,
+    {
+      "Name" = "${random_string.identifier.result}-VpcEndpointSecurityGroup-3"
+    },
+  )
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 #legacy
 module "vpc_endpoint" {
   source = "../../module"
 
   codebuild_endpoint_enable               = true
-  codebuild_private_dns_enable            = true
   codebuild_fips_endpoint_enable          = false
   codebuild_fips_private_dns_enable       = false
+  codebuild_private_dns_enable            = true
   dynamo_db_endpoint_enable               = true
   ec2_endpoint_enable                     = true
   ec2_private_dns_enable                  = true
@@ -175,10 +219,26 @@ module "vpc_endpoint_2" {
   gateway_endpoints         = ["s3", "dynamodb"]
   interface_endpoints       = ["codebuild", "ec2", "ec2messages", "elasticloadbalancing", "events", "execute-api", "kinesis-streams", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]
   route_tables              = module.base_network_2.private_route_tables
-  security_groups           = [aws_security_group.vpc_endpoint_2.id]
   s3_endpoint_enable        = false
+  security_groups           = [aws_security_group.vpc_endpoint_2.id]
   subnets                   = module.base_network_2.private_subnets
   tags                      = local.tags
   vpc_id                    = module.base_network_2.vpc_id
 }
 
+# added a simple gateway endpoint
+module "vpc_endpoint_3" {
+  source = "../../module"
+
+  dynamo_db_endpoint_enable = false
+  environment               = local.tags["Environment"]
+  gateway_endpoints         = ["s3", "dynamodb"]
+  s3_endpoint_enable        = false
+  tags                      = local.tags
+  vpc_id                    = module.base_network_3.vpc_id
+
+  route_tables = concat(
+    module.base_network_3.private_route_tables,
+    module.base_network_3.public_route_tables
+  )
+}
