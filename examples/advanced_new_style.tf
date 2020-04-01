@@ -24,7 +24,7 @@ module "security_groups" {
 # choose to use the new style implementation as the default is `true` for those variables.
 # If not disabled, a collision will occur.
 module "vpc_endpoint" {
-  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.1"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.2"
 
   dynamo_db_endpoint_enable = false
   enable_private_dns_list   = ["codebuild", "ec2", "ec2messages", "elasticloadbalancing", "events", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]

@@ -8,7 +8,7 @@ This module builds VPC endpoints based on the inputs.
 
 ```HCL
 module "vpc_endpoint" {
-  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.1"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.2"
 
   dynamo_db_endpoint_enable = false
   enable_private_dns_list   = ["codebuild", "ec2", "ec2messages", "elasticloadbalancing", "events", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]
@@ -30,7 +30,7 @@ module "vpc_endpoint" {
 
 ```HCL
 module "vpc_endpoint" {
-  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.1"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.2"
 
   dynamo_db_endpoint_enable = true
   s3_endpoint_enable        = true
