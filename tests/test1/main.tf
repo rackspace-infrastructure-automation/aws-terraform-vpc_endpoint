@@ -26,7 +26,7 @@ resource "random_string" "identifier" {
 }
 
 module "base_network" {
-  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=master"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.0.10"
 
   vpc_name = "VPC-Endpoint-${random_string.identifier.result}"
 }
@@ -80,6 +80,10 @@ module "vpc_endpoint" {
   ec2messages_endpoint_enable             = true
   ec2messages_private_dns_enable          = true
   elasticloadbalancing_endpoint_enable    = true
+  ecr_api_endpoint_enable                 = true
+  ecr_api_private_dns_enable              = true
+  ecr_dkr_endpoint_enable                 = true
+  ecr_dkr_private_dns_enable              = true
   elasticloadbalancing_private_dns_enable = true
   environment                             = "${lookup(local.tags, "Environment")}"
   events_endpoint_enable                  = true
