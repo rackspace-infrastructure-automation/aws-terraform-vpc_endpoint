@@ -23,6 +23,16 @@ output "ec2_vpc_endpoint_id" {
   value       = "${module.vpc_endpoint.ec2_vpc_endpoint_id}"
 }
 
+output "ecr_api_vpc_endpoint_id" {
+  description = "ECR API vpc endpoint ID"
+  value       = "${module.vpc_endpoint.ecr_api_vpc_endpoint_id}"
+}
+
+output "ecr_dkr_vpc_endpoint_id" {
+  description = "ECR DKR vpc endpoint ID"
+  value       = "${module.vpc_endpoint.ecr_dkr_vpc_endpoint_id}"
+}
+
 output "elasticloadbalancing_vpc_endpoint_id" {
   description = "Elasticloadbalancing vpc endpoint ID"
   value       = "${module.vpc_endpoint.elasticloadbalancing_vpc_endpoint_id}"
