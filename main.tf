@@ -161,6 +161,32 @@ resource "aws_vpc_endpoint" "ec2messages_endpoint" {
   vpc_id              = var.vpc_id
 }
 
+# ecr.api
+resource "aws_vpc_endpoint" "ecr_api_endpoint" {
+  count = var.ecr_api_endpoint_enable ? 1 : 0
+
+  private_dns_enabled = var.ecr_api_private_dns_enable
+  security_group_ids  = var.security_groups
+  service_name        = "com.amazonaws.${data.aws_region.current_region.name}.ecr.api"
+  subnet_ids          = var.subnets
+  tags                = local.merged_tags
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = var.vpc_id
+}
+
+# ecr.dkr
+resource "aws_vpc_endpoint" "ecr_dkr_endpoint" {
+  count = var.ecr_dkr_endpoint_enable ? 1 : 0
+
+  private_dns_enabled = var.ecr_dkr_private_dns_enable
+  security_group_ids  = var.security_groups
+  service_name        = "com.amazonaws.${data.aws_region.current_region.name}.ecr.dkr"
+  subnet_ids          = var.subnets
+  tags                = local.merged_tags
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = var.vpc_id
+}
+
 # elasticloadbalancing
 resource "aws_vpc_endpoint" "elasticloadbalancing_endpoint" {
   count = var.elasticloadbalancing_endpoint_enable ? 1 : 0

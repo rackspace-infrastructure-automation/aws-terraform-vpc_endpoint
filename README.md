@@ -86,6 +86,10 @@ From version 0.12.1, the following changes have occurred:
 | ec2\_private\_dns\_enable | Enable/Disable private dns on the ec2 endpoint. Allowed values: true, false | `bool` | `false` | no |
 | ec2messages\_endpoint\_enable | Enable/Disable the ec2messages VPC Endpoint. Allowed values: true, false | `bool` | `false` | no |
 | ec2messages\_private\_dns\_enable | Enable/Disable private dns on the ec2messages endpoint. Allowed values: true, false | `bool` | `false` | no |
+| ecr\_api\_endpoint\_enable | Enable/Disable the ecr.api VPC endpoint. Allowed values: true, false | `bool` | `false` | no |
+| ecr\_api\_private\_dns\_enable | Enable/Disable private dns on the ecr.api endpoint. Allowed values: true, false | `bool` | `false` | no |
+| ecr\_dkr\_endpoint\_enable | Enable/Disable the ecr.dkr endpoint. Allowed values: true, false | `bool` | `false` | no |
+| ecr\_dkr\_private\_dns\_enable | Enable/Disable private dns on the ecr.dkr endpoint. Allowed values: true, false | `bool` | `false` | no |
 | elasticloadbalancing\_endpoint\_enable | Enable/Disable the elasticloadbalancing VPC Endpoint. Allowed values: true, false | `bool` | `false` | no |
 | elasticloadbalancing\_private\_dns\_enable | Enable/Disable private dns on the elasticloadbalancing endpoint. Allowed values: true, false | `bool` | `false` | no |
 | enable\_private\_dns\_list | List of Interface endpoints that should have private DNS enabled.  This should be a subset of the list for interface endpoints to provision. | `list(string)` | `[]` | no |
@@ -132,6 +136,8 @@ From version 0.12.1, the following changes have occurred:
 | dynamodb\_vpc\_endpoint\_id | DynamoDB VPC endpoint ID |
 | ec2\_vpc\_endpoint\_id | EC2 VPC endpoint ID |
 | ec2messages\_vpc\_endpoint\_id | EC2messages VPC endpoint ID |
+| ecr\_api\_vpc\_endpoint\_id | ecr.api VPC endpoint ID |
+| ecr\_dkr\_vpc\_endpoint\_id | ecr.dkr VPC endpoint ID |
 | elasticloadbalancing\_vpc\_endpoint\_id | Elasticloadbalancing VPC endpoint ID |
 | endpoint\_ids | Combined List of gateWay and Interface IDs |
 | events\_vpc\_endpoint\_id | Events VPC endpoint ID |
