@@ -26,7 +26,7 @@ resource "random_string" "identifier" {
 }
 
 module "base_network" {
-  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=master"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.0.10"
 
   vpc_name = "VPC-Endpoint-${random_string.identifier.result}"
 }
