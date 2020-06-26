@@ -55,6 +55,31 @@ variable "ec2messages_private_dns_enable" {
   default     = false
 }
 
+variable "ecr_api_endpoint_enable" {
+  description = "Enable/Disable the ecr.api VPC endpoint. Allowed values: true, false"
+  type        = bool
+  default     = false
+}
+
+variable "ecr_api_private_dns_enable" {
+  description = "Enable/Disable private dns on the ecr.api endpoint. Allowed values: true, false"
+  type        = bool
+  default     = false
+}
+
+
+variable "ecr_dkr_endpoint_enable" {
+  description = "Enable/Disable the ecr.dkr endpoint. Allowed values: true, false"
+  type        = bool
+  default     = false
+}
+
+variable "ecr_dkr_private_dns_enable" {
+  description = "Enable/Disable private dns on the ecr.dkr endpoint. Allowed values: true, false"
+  type        = bool
+  default     = false
+}
+
 variable "elasticloadbalancing_endpoint_enable" {
   description = "Enable/Disable the elasticloadbalancing VPC Endpoint. Allowed values: true, false"
   type        = bool

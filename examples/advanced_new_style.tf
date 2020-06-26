@@ -27,9 +27,9 @@ module "vpc_endpoint" {
   source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.2"
 
   dynamo_db_endpoint_enable = false
-  enable_private_dns_list   = ["codebuild", "ec2", "ec2messages", "elasticloadbalancing", "events", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]
+  enable_private_dns_list   = ["codebuild", "ec2", "ec2messages", "elasticloadbalancing", "ecr.api", "ecr.dkr", "events", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]
   gateway_endpoints         = ["s3", "dynamodb"]
-  interface_endpoints       = ["codebuild", "ec2", "ec2messages", "elasticloadbalancing", "events", "execute-api", "kinesis-streams", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]
+  interface_endpoints       = ["codebuild", "ec2", "ec2messages", "elasticloadbalancing", "ecr.api", "ecr.dkr", "events", "execute-api", "kinesis-streams", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]
   security_groups           = [module.security_groups.vpc_endpoint_security_group_id]
   subnets                   = module.base_network.private_subnets
   s3_endpoint_enable        = false

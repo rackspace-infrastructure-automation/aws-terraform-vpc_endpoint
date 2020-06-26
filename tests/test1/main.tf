@@ -174,6 +174,10 @@ module "vpc_endpoint" {
   ec2_private_dns_enable                  = true
   ec2messages_endpoint_enable             = true
   ec2messages_private_dns_enable          = true
+  ecr_api_endpoint_enable                 = true
+  ecr_api_private_dns_enable              = true
+  ecr_dkr_endpoint_enable                 = true
+  ecr_dkr_private_dns_enable              = true
   elasticloadbalancing_endpoint_enable    = true
   elasticloadbalancing_private_dns_enable = true
   environment                             = local.tags["Environment"]
@@ -214,10 +218,10 @@ module "vpc_endpoint_2" {
   source = "../../module"
 
   dynamo_db_endpoint_enable = false
-  enable_private_dns_list   = ["codebuild", "ec2", "ec2messages", "elasticloadbalancing", "events", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]
+  enable_private_dns_list   = ["codebuild", "ec2", "ec2messages", "ecr.api", "ecr.dkr", "elasticloadbalancing", "events", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]
   environment               = local.tags["Environment"]
   gateway_endpoints         = ["s3", "dynamodb"]
-  interface_endpoints       = ["codebuild", "ec2", "ec2messages", "elasticloadbalancing", "events", "execute-api", "kinesis-streams", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]
+  interface_endpoints       = ["codebuild", "ec2", "ec2messages", "elasticloadbalancing", "ecr.api", "ecr.dkr", "events", "execute-api", "kinesis-streams", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]
   route_tables              = module.base_network_2.private_route_tables
   s3_endpoint_enable        = false
   security_groups           = [aws_security_group.vpc_endpoint_2.id]

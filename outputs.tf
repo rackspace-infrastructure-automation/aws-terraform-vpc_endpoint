@@ -23,6 +23,16 @@ output "ec2messages_vpc_endpoint_id" {
   value       = element(coalescelist(aws_vpc_endpoint.ec2messages_endpoint.*.id, [""]), 0)
 }
 
+output "ecr_api_vpc_endpoint_id" {
+  description = "ecr.api VPC endpoint ID"
+  value       = element(coalescelist(aws_vpc_endpoint.ecr_api_endpoint.*.id, [""]), 0)
+}
+
+output "ecr_dkr_vpc_endpoint_id" {
+  description = "ecr.dkr VPC endpoint ID"
+  value       = element(coalescelist(aws_vpc_endpoint.ecr_dkr_endpoint.*.id, [""]), 0)
+}
+
 output "elasticloadbalancing_vpc_endpoint_id" {
   description = "Elasticloadbalancing VPC endpoint ID"
   value       = element(coalescelist(aws_vpc_endpoint.elasticloadbalancing_endpoint.*.id, [""]), 0)

@@ -32,6 +32,10 @@ module "vpc_endpoint" {
   ec2_private_dns_enable                  = true
   ec2messages_endpoint_enable             = true
   ec2messages_private_dns_enable          = true
+  ecr_api_endpoint_enable                 = true
+  ecr_api_private_dns_enable              = true
+  ecr_dkr_endpoint_enable                 = true
+  ecr_dkr_private_dns_enable              = true
   elasticloadbalancing_endpoint_enable    = true
   elasticloadbalancing_private_dns_enable = true
   events_endpoint_enable                  = true
