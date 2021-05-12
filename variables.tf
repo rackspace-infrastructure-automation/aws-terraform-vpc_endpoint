@@ -199,6 +199,23 @@ variable "s3_endpoint_enable" {
   default     = true
 }
 
+variable "s3_endpoint_policy_text" {
+  description = "The JSON S3 Endpoint policy text to apply to the VPC Endpoint. The length must be between 100 and 10,240 characters. Default is allow everyone all access to every S3 Bucket"
+  type        = string
+  default     = <<EOT
+{
+  "Statement": [
+      {
+          "Action": "*",
+          "Effect": "Allow",
+          "Resource": "*",
+          "Principal": "*"
+      }
+  ]
+}
+EOT
+}
+
 variable "sagemaker_runtime_endpoint_enable" {
   description = "Enable/Disable the sagemaker.runtime VPC Endpoint. Allowed values: true, false"
   type        = bool

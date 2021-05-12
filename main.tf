@@ -92,6 +92,7 @@ data "aws_region" "current_region" {}
 resource "aws_vpc_endpoint" "s3_endpoint" {
   count = var.s3_endpoint_enable ? 1 : 0
 
+  policy            = var.s3_endpoint_policy_text
   route_table_ids   = var.route_tables
   service_name      = "com.amazonaws.${data.aws_region.current_region.name}.s3"
   tags              = local.merged_tags
