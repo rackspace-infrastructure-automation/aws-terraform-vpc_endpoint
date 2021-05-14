@@ -8,13 +8,13 @@ provider "aws" {
 }
 
 module "base_network" {
-  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.12.0"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.12.6"
 
   name = "VPC-Endpoint-Exammple"
 }
 
 module "vpc_endpoint" {
-  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.2"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.5"
 
   dynamo_db_endpoint_enable = false
   gateway_endpoints         = ["s3", "dynamodb"]
