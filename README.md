@@ -8,7 +8,7 @@ This module builds VPC endpoints based on the inputs.
 
 ```HCL
 module "vpc_endpoint" {
-  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.2"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.5"
 
   dynamo_db_endpoint_enable = false
   enable_private_dns_list   = ["codebuild", "ec2", "ec2messages", "elasticloadbalancing", "events", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]
@@ -30,7 +30,7 @@ module "vpc_endpoint" {
 
 ```HCL
 module "vpc_endpoint" {
-  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.2"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.5"
 
   dynamo_db_endpoint_enable = true
   s3_endpoint_enable        = true
@@ -67,16 +67,34 @@ From version 0.12.1, the following changes have occurred:
 - `interface_endpoints` - introduced as a single variable to replace all "enable" Interface booleans. It is a list of interface servicenames.
 - `enable_private_dns_list` - introduced as a single variable to replace all of the "enable" Private DNS Interface booleans.  It is a list of interface servicenames.
 
+## Requirements
+
+| Name | Version |
+|------|---------|
+| terraform | >= 0.12 |
+| aws | >= 2.7.0 |
+
 ## Providers
 
 | Name | Version |
 |------|---------|
 | aws | >= 2.7.0 |
 
+## Modules
+
+No Modules.
+
+## Resources
+
+| Name |
+|------|
+| [aws_region](https://registry.terraform.io/providers/hashicorp/aws/2.7.0/docs/data-sources/region) |
+| [aws_vpc_endpoint](https://registry.terraform.io/providers/hashicorp/aws/2.7.0/docs/resources/vpc_endpoint) |
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | codebuild\_endpoint\_enable | Enable/Disable the codebuild VPC Endpoint. Allowed values: true, false | `bool` | `false` | no |
 | codebuild\_fips\_endpoint\_enable | Enable/Disable the codebuild-fips VPC Endpoint. Allowed values: true, false | `bool` | `false` | no |
 | codebuild\_fips\_private\_dns\_enable | Enable/Disable private dns on the codebuild-fips endpoint. Allowed values: true, false | `bool` | `false` | no |
@@ -93,6 +111,7 @@ From version 0.12.1, the following changes have occurred:
 | elasticloadbalancing\_endpoint\_enable | Enable/Disable the elasticloadbalancing VPC Endpoint. Allowed values: true, false | `bool` | `false` | no |
 | elasticloadbalancing\_private\_dns\_enable | Enable/Disable private dns on the elasticloadbalancing endpoint. Allowed values: true, false | `bool` | `false` | no |
 | enable\_private\_dns\_list | List of Interface endpoints that should have private DNS enabled.  This should be a subset of the list for interface endpoints to provision. | `list(string)` | `[]` | no |
+| endpoint\_policies | A map of Endpoint polices to apply to associated VPC Endpoints. Each policy should be listed in a key matching its service (See gateway\_endpoints and interface\_endpoints)  Each policy must be between 100 and 10,240 characters. Services not given an explicit policy will use the terraform default for the service endpoint. | `map` | `{}` | no |
 | environment | Application environment for which this network is being created. one of: ('Development', 'Integration', 'PreProduction', 'Production', 'QA', 'Staging', 'Test') | `string` | `"Development"` | no |
 | events\_endpoint\_enable | Enable/Disable the events VPC Endpoint. Allowed values: true, false | `bool` | `false` | no |
 | events\_private\_dns\_enable | Enable/Disable private dns on the events endpoint. Allowed values: true, false | `bool` | `false` | no |
@@ -153,4 +172,3 @@ From version 0.12.1, the following changes have occurred:
 | sns\_vpc\_endpoint\_id | SNS VPC endpoint ID |
 | sqs\_vpc\_endpoint\_id | SQS VPC endpoint ID |
 | ssm\_vpc\_endpoint\_id | SSM VPC endpoint ID |
-

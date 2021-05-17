@@ -19,6 +19,32 @@ locals {
     ServiceProvider = "Rackspace"
     Terraform       = "true"
   }
+
+  endpoint_policies = {
+    s3 = {
+      Version = "2012-10-17"
+      Statement = [
+        {
+          Action    = "*"
+          Effect    = "Allow"
+          Resource  = "*"
+          Principal = "*"
+        }
+      ]
+    }
+
+    ec2 = {
+      Version = "2012-10-17"
+      Statement = [
+        {
+          Action    = "*"
+          Effect    = "Allow"
+          Resource  = "*"
+          Principal = "*"
+        }
+      ]
+    }
+  }
 }
 
 resource "random_string" "identifier" {
@@ -30,19 +56,19 @@ resource "random_string" "identifier" {
 }
 
 module "base_network" {
-  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.12.1"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.12.6"
 
   name = "VPC1-Endpoint-${random_string.identifier.result}"
 }
 
 module "base_network_2" {
-  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.12.1"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.12.6"
 
   name = "VPC2-Endpoint-${random_string.identifier.result}"
 }
 
 module "base_network_3" {
-  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.12.1"
+  source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_basenetwork?ref=v0.12.6"
 
   name = "VPC3-Endpoint-${random_string.identifier.result}"
 }
@@ -180,6 +206,7 @@ module "vpc_endpoint" {
   ecr_dkr_private_dns_enable              = true
   elasticloadbalancing_endpoint_enable    = true
   elasticloadbalancing_private_dns_enable = true
+  endpoint_policies                       = local.endpoint_policies
   environment                             = local.tags["Environment"]
   events_endpoint_enable                  = true
   events_private_dns_enable               = true
@@ -219,6 +246,7 @@ module "vpc_endpoint_2" {
 
   dynamo_db_endpoint_enable = false
   enable_private_dns_list   = ["codebuild", "ec2", "ec2messages", "ecr.api", "ecr.dkr", "elasticloadbalancing", "events", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]
+  endpoint_policies         = local.endpoint_policies
   environment               = local.tags["Environment"]
   gateway_endpoints         = ["s3", "dynamodb"]
   interface_endpoints       = ["codebuild", "ec2", "ec2messages", "elasticloadbalancing", "ecr.api", "ecr.dkr", "events", "execute-api", "kinesis-streams", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]
@@ -235,6 +263,7 @@ module "vpc_endpoint_3" {
   source = "../../module"
 
   dynamo_db_endpoint_enable = false
+  endpoint_policies         = local.endpoint_policies
   environment               = local.tags["Environment"]
   gateway_endpoints         = ["s3", "dynamodb"]
   s3_endpoint_enable        = false

@@ -9,7 +9,7 @@
  *
  * ```HCL
  * module "vpc_endpoint" {
- *   source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.2"
+ *   source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.5"
  *
  *   dynamo_db_endpoint_enable = false
  *   enable_private_dns_list   = ["codebuild", "ec2", "ec2messages", "elasticloadbalancing", "events", "kms", "logs", "monitoring", "sagemaker.runtime", "secretsmanager", "servicecatalog", "sns", "sqs", "ssm"]
@@ -31,7 +31,7 @@
  *
  * ```HCL
  * module "vpc_endpoint" {
- *   source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.2"
+ *   source = "git@github.com:rackspace-infrastructure-automation/aws-terraform-vpc_endpoint?ref=v0.12.5"
  *
  *   dynamo_db_endpoint_enable = true
  *   s3_endpoint_enable        = true
@@ -85,6 +85,7 @@ locals {
 
   merged_tags = merge(local.tags, var.tags)
 
+  endpoint_policies = { for k, v in var.endpoint_policies : k => jsonencode(v) }
 }
 
 data "aws_region" "current_region" {}
@@ -92,6 +93,7 @@ data "aws_region" "current_region" {}
 resource "aws_vpc_endpoint" "s3_endpoint" {
   count = var.s3_endpoint_enable ? 1 : 0
 
+  policy            = lookup(local.endpoint_policies, "s3", null)
   route_table_ids   = var.route_tables
   service_name      = "com.amazonaws.${data.aws_region.current_region.name}.s3"
   tags              = local.merged_tags
@@ -102,6 +104,7 @@ resource "aws_vpc_endpoint" "s3_endpoint" {
 resource "aws_vpc_endpoint" "dynamo_endpoint" {
   count = var.dynamo_db_endpoint_enable ? 1 : 0
 
+  policy            = lookup(local.endpoint_policies, "dynamodb", null)
   route_table_ids   = var.route_tables
   service_name      = "com.amazonaws.${data.aws_region.current_region.name}.dynamodb"
   tags              = local.merged_tags
@@ -113,6 +116,7 @@ resource "aws_vpc_endpoint" "dynamo_endpoint" {
 resource "aws_vpc_endpoint" "codebuild_endpoint" {
   count = var.codebuild_endpoint_enable ? 1 : 0
 
+  policy              = lookup(local.endpoint_policies, "codebuild", null)
   private_dns_enabled = var.codebuild_private_dns_enable
   security_group_ids  = var.security_groups
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.codebuild"
@@ -126,6 +130,7 @@ resource "aws_vpc_endpoint" "codebuild_endpoint" {
 resource "aws_vpc_endpoint" "codebuild_fips_endpoint" {
   count = var.codebuild_fips_endpoint_enable ? 1 : 0
 
+  policy              = lookup(local.endpoint_policies, "codebuild-fips", null)
   private_dns_enabled = var.codebuild_fips_private_dns_enable
   security_group_ids  = var.security_groups
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.codebuild-fips"
@@ -139,6 +144,7 @@ resource "aws_vpc_endpoint" "codebuild_fips_endpoint" {
 resource "aws_vpc_endpoint" "ec2_endpoint" {
   count = var.ec2_endpoint_enable ? 1 : 0
 
+  policy              = lookup(local.endpoint_policies, "ec2", null)
   private_dns_enabled = var.ec2_private_dns_enable
   security_group_ids  = var.security_groups
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.ec2"
@@ -152,6 +158,7 @@ resource "aws_vpc_endpoint" "ec2_endpoint" {
 resource "aws_vpc_endpoint" "ec2messages_endpoint" {
   count = var.ec2messages_endpoint_enable ? 1 : 0
 
+  policy              = lookup(local.endpoint_policies, "ec2messages", null)
   private_dns_enabled = var.ec2messages_private_dns_enable
   security_group_ids  = var.security_groups
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.ec2messages"
@@ -165,6 +172,7 @@ resource "aws_vpc_endpoint" "ec2messages_endpoint" {
 resource "aws_vpc_endpoint" "ecr_api_endpoint" {
   count = var.ecr_api_endpoint_enable ? 1 : 0
 
+  policy              = lookup(local.endpoint_policies, "ecr.api", null)
   private_dns_enabled = var.ecr_api_private_dns_enable
   security_group_ids  = var.security_groups
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.ecr.api"
@@ -178,6 +186,7 @@ resource "aws_vpc_endpoint" "ecr_api_endpoint" {
 resource "aws_vpc_endpoint" "ecr_dkr_endpoint" {
   count = var.ecr_dkr_endpoint_enable ? 1 : 0
 
+  policy              = lookup(local.endpoint_policies, "ecr.dkr", null)
   private_dns_enabled = var.ecr_dkr_private_dns_enable
   security_group_ids  = var.security_groups
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.ecr.dkr"
@@ -191,6 +200,7 @@ resource "aws_vpc_endpoint" "ecr_dkr_endpoint" {
 resource "aws_vpc_endpoint" "elasticloadbalancing_endpoint" {
   count = var.elasticloadbalancing_endpoint_enable ? 1 : 0
 
+  policy              = lookup(local.endpoint_policies, "elasticloadbalancing", null)
   private_dns_enabled = var.elasticloadbalancing_private_dns_enable
   security_group_ids  = var.security_groups
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.elasticloadbalancing"
@@ -204,6 +214,7 @@ resource "aws_vpc_endpoint" "elasticloadbalancing_endpoint" {
 resource "aws_vpc_endpoint" "events_endpoint" {
   count = var.events_endpoint_enable ? 1 : 0
 
+  policy              = lookup(local.endpoint_policies, "events", null)
   private_dns_enabled = var.events_private_dns_enable
   security_group_ids  = var.security_groups
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.events"
@@ -217,6 +228,7 @@ resource "aws_vpc_endpoint" "events_endpoint" {
 resource "aws_vpc_endpoint" "execute_api_endpoint" {
   count = var.execute_api_endpoint_enable ? 1 : 0
 
+  policy              = lookup(local.endpoint_policies, "execute-api", null)
   private_dns_enabled = var.execute_api_private_dns_enable
   security_group_ids  = var.security_groups
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.execute-api"
@@ -230,6 +242,7 @@ resource "aws_vpc_endpoint" "execute_api_endpoint" {
 resource "aws_vpc_endpoint" "kinesis_streams_endpoint" {
   count = var.kinesis_streams_endpoint_enable ? 1 : 0
 
+  policy              = lookup(local.endpoint_policies, "kinesis-streams", null)
   private_dns_enabled = var.kinesis_streams_private_dns_enable
   security_group_ids  = var.security_groups
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.kinesis-streams"
@@ -243,6 +256,7 @@ resource "aws_vpc_endpoint" "kinesis_streams_endpoint" {
 resource "aws_vpc_endpoint" "kms_endpoint" {
   count = var.kms_endpoint_enable ? 1 : 0
 
+  policy              = lookup(local.endpoint_policies, "kms", null)
   private_dns_enabled = var.kms_private_dns_enable
   security_group_ids  = var.security_groups
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.kms"
@@ -256,6 +270,7 @@ resource "aws_vpc_endpoint" "kms_endpoint" {
 resource "aws_vpc_endpoint" "logs_endpoint" {
   count = var.logs_endpoint_enable ? 1 : 0
 
+  policy              = lookup(local.endpoint_policies, "logs", null)
   private_dns_enabled = var.logs_private_dns_enable
   security_group_ids  = var.security_groups
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.logs"
@@ -269,6 +284,7 @@ resource "aws_vpc_endpoint" "logs_endpoint" {
 resource "aws_vpc_endpoint" "monitoring_endpoint" {
   count = var.monitoring_endpoint_enable ? 1 : 0
 
+  policy              = lookup(local.endpoint_policies, "monitoring", null)
   private_dns_enabled = var.monitoring_private_dns_enable
   security_group_ids  = var.security_groups
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.monitoring"
@@ -282,6 +298,7 @@ resource "aws_vpc_endpoint" "monitoring_endpoint" {
 resource "aws_vpc_endpoint" "sagemaker_runtime_endpoint" {
   count = var.sagemaker_runtime_endpoint_enable ? 1 : 0
 
+  policy              = lookup(local.endpoint_policies, "sagemaker.runtime", null)
   private_dns_enabled = var.sagemaker_runtime_private_dns_enable
   security_group_ids  = var.security_groups
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.sagemaker.runtime"
@@ -295,6 +312,7 @@ resource "aws_vpc_endpoint" "sagemaker_runtime_endpoint" {
 resource "aws_vpc_endpoint" "secretsmanager_endpoint" {
   count = var.secretsmanager_endpoint_enable ? 1 : 0
 
+  policy              = lookup(local.endpoint_policies, "secretsmanager", null)
   private_dns_enabled = var.secretsmanager_private_dns_enable
   security_group_ids  = var.security_groups
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.secretsmanager"
@@ -308,6 +326,7 @@ resource "aws_vpc_endpoint" "secretsmanager_endpoint" {
 resource "aws_vpc_endpoint" "servicecatalog_endpoint" {
   count = var.servicecatalog_endpoint_enable ? 1 : 0
 
+  policy              = lookup(local.endpoint_policies, "servicecatalog", null)
   private_dns_enabled = var.servicecatalog_private_dns_enable
   security_group_ids  = var.security_groups
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.servicecatalog"
@@ -321,6 +340,7 @@ resource "aws_vpc_endpoint" "servicecatalog_endpoint" {
 resource "aws_vpc_endpoint" "sns_endpoint" {
   count = var.sns_endpoint_enable ? 1 : 0
 
+  policy              = lookup(local.endpoint_policies, "sns", null)
   private_dns_enabled = var.sns_private_dns_enable
   security_group_ids  = var.security_groups
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.sns"
@@ -334,6 +354,7 @@ resource "aws_vpc_endpoint" "sns_endpoint" {
 resource "aws_vpc_endpoint" "sqs_endpoint" {
   count = var.sqs_endpoint_enable ? 1 : 0
 
+  policy              = lookup(local.endpoint_policies, "sqs", null)
   private_dns_enabled = var.sqs_private_dns_enable
   security_group_ids  = var.security_groups
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.sqs"
@@ -347,6 +368,7 @@ resource "aws_vpc_endpoint" "sqs_endpoint" {
 resource "aws_vpc_endpoint" "ssm_endpoint" {
   count = var.ssm_endpoint_enable ? 1 : 0
 
+  policy              = lookup(local.endpoint_policies, "ssm", null)
   private_dns_enabled = var.ssm_private_dns_enable
   security_group_ids  = var.security_groups
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.ssm"
@@ -361,6 +383,7 @@ resource "aws_vpc_endpoint" "ssm_endpoint" {
 resource "aws_vpc_endpoint" "gateway" {
   for_each = toset(var.gateway_endpoints)
 
+  policy            = lookup(local.endpoint_policies, each.key, null)
   route_table_ids   = var.route_tables
   service_name      = "com.amazonaws.${data.aws_region.current_region.name}.${each.key}"
   tags              = local.merged_tags
@@ -375,6 +398,7 @@ resource "aws_vpc_endpoint" "gateway" {
 resource "aws_vpc_endpoint" "interface" {
   for_each = toset(var.interface_endpoints)
 
+  policy              = lookup(local.endpoint_policies, each.key, null)
   private_dns_enabled = contains(var.enable_private_dns_list, each.key) ? true : false
   security_group_ids  = var.security_groups
   service_name        = "com.amazonaws.${data.aws_region.current_region.name}.${each.key}"

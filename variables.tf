@@ -98,6 +98,12 @@ variable "enable_private_dns_list" {
   default     = []
 }
 
+variable "endpoint_policies" {
+  description = "A map of Endpoint polices to apply to associated VPC Endpoints. Each policy should be listed in a key matching its service (See gateway_endpoints and interface_endpoints)  Each policy must be between 100 and 10,240 characters. Services not given an explicit policy will use the terraform default for the service endpoint."
+  type        = map
+  default     = {}
+}
+
 variable "environment" {
   description = "Application environment for which this network is being created. one of: ('Development', 'Integration', 'PreProduction', 'Production', 'QA', 'Staging', 'Test')"
   type        = string
