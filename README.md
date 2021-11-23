@@ -22,16 +22,31 @@ module "vpc_endpoint" {
 
 Full working references are available at [examples](examples)
 
+## Requirements
+
+No requirements.
+
 ## Providers
 
 | Name | Version |
 |------|---------|
 | aws | n/a |
 
+## Modules
+
+No Modules.
+
+## Resources
+
+| Name |
+|------|
+| [aws_region](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) |
+| [aws_vpc_endpoint](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint) |
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | codebuild\_endpoint\_enable | Enable/Disable the codebuild VPC Endpoint. Allowed values: true, false | `string` | `false` | no |
 | codebuild\_fips\_endpoint\_enable | Enable/Disable the codebuild-fips VPC Endpoint. Allowed values: true, false | `string` | `false` | no |
 | codebuild\_fips\_private\_dns\_enable | Enable/Disable private dns on the codebuild-fips endpoint. Allowed values: true, false | `string` | `false` | no |
@@ -104,4 +119,3 @@ Full working references are available at [examples](examples)
 | sns\_vpc\_endpoint\_id | SNS VPC endpoint ID |
 | sqs\_vpc\_endpoint\_id | SQS VPC endpoint ID |
 | ssm\_vpc\_endpoint\_id | SSM VPC endpoint ID |
-
