@@ -1,3 +1,6 @@
+> [!CAUTION]
+> This project is end of life. This repo will be deleted on June 2nd 2025.
+
 # aws-terraform-vpc\_endpoint
 
 This module builds VPC endpoints based on the inputs.
